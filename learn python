@@ -1,0 +1,30 @@
+#这里讲的是and or是怎么用的。
+如果a, b是逻辑变量， 则两类的用法基本一致
+
+In[103]:(3>0) | (3<1)
+Out[103]: True
+In[104]:(3>0) and (3<1)# 注意这里是有（）的
+Out[104]: False
+In[105]:(3>0) or (3<1)
+Out[105]: True
+In[106]:(3>0) & (3<1)
+Out[106]: False
+————————————————
+如果a，b是数值变量， 则&， |表示位运算， and，or则依据是否非0来决定输出，
+&， |怎么用：
+# 1&2，2在二进制里面是10,1在二进制中是01，那么01与运算10得到是0 
+1 & 2         # 输出为 0， 
+1 | 2         # 输出为3
+
+#自写程序 shan
+age=30
+if age<2:
+    print("he is infant")
+elif (age>2) & (age<13):
+    print("he is a child")
+elif (age>13) & (age<20):
+    print("he is a kid")
+elif (age>20) & (age<65):
+    print("he is a man")
+elif age>65:
+    print("he is old man")
