@@ -39,3 +39,13 @@ if usernames:
             print(f"hello ,{username},you are not welcome xiaolaji")
 else:
     print("你是个空的，")
+
+#这个案例教你怎么去掉大小写识别。
+current_users = ['eric', 'willie', 'admin', 'erin', 'Ever']
+new_users = ['sarah', 'Willie', 'PHIL', 'ever', 'Iona']
+current_users_lower=
+for new_user in new_users:
+    if new_user.lower()in current_users.lower():
+        print("有重名，清更换")
+    else:
+        print("谢谢，注册成功")
