@@ -28,3 +28,14 @@ elif (age>20) & (age<65):
     print("he is a man")
 elif age>65:
     print("he is old man")
+ 
+ #在Python中：False、0、''、[]、{}、()都视为假，因此可以直接进行逻辑运算。此方法效率最高，但可读性较差，无法准确预知原先的数据类型具体是什么，只是非常模糊地知道可能是False、0、''、[]、{}、()这6种类型中的一种。
+ usernames = []
+if usernames:
+    for username in usernames:
+        if username=='admin':
+            print("hello admin ,i love you")
+        else:
+            print(f"hello ,{username},you are not welcome xiaolaji")
+else:
+    print("你是个空的，")
