@@ -81,3 +81,29 @@ a = [i+j for i in 'abc' for j in 'mnp']
 print(a)
 result ['am','an','ap','bm','bn','bp','cm','cn','cp']
 ########################################################
+for i in range(1,10):
+    if i==1:
+        print("1st")
+    elif i==2:
+        print("2nd")
+    elif i==3:
+        print("3rd")
+    else:
+        print(f"{i}th")
+    ##########################################################
+    
+    person={'first_name':'jiang','last_name':'shan','age':28,'city':'yichun'}
+print(person['first_name'])
+print(person['last_name'])
+print(person['age'])
+print(person['city'])
+###################################################################
+favirite_number={
+    'andy':1,
+    'shan':2,
+    'xing':3,
+    'fang':4,
+    'huang':5
+}
+print(f"andy has the favirite number is {favirite_number['andy']}")
+###########################################################################
