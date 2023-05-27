@@ -41,11 +41,43 @@ else:
     print("你是个空的，")
 
 #这个案例教你怎么去掉大小写识别。
+# current_users = ['eric', 'willie', 'admin', 'erin', 'Ever']
+# new_users = ['sarah', 'Willie', 'PHIL', 'ever', 'Iona']
+# current_users_lower=
+# for new_user in new_users:
+#     if new_user.lower()in current_users.lower():#这样书写是错误的，原因是current_users是个列表，不能直接调用lower()方法。
+#         print("有重名，清更换")
+#     else:
+#         print("谢谢，注册成功")
 current_users = ['eric', 'willie', 'admin', 'erin', 'Ever']
 new_users = ['sarah', 'Willie', 'PHIL', 'ever', 'Iona']
-current_users_lower=
+
+current_users_lower=[current_user.lower() for current_user in current_users]
 for new_user in new_users:
-    if new_user.lower()in current_users.lower():
+    if new_user.lower() in current_users_lower:
         print("有重名，清更换")
     else:
         print("谢谢，注册成功")
+#注意这里使用了列表的生成的方法，###################################
+python3的列表生成式主要有3种：
+for循环+if ------- [i for i in xxx if x xxx]
+for循环+if else --------- [i if exp1 else exp2 for i in xxx]
+多层for循环 ----------- [for i in xxx for j in xxx]
+# 列表生成式1  for循环+if
+# [i for i in xxx if x xxx]
+# 此处的if语句主要起判断的作用,if在后
+a = [i for i in [1,2,3,4] if i > 2]
+print(a)
+result [3,4]
+# 列表生成式2   for循环+if else
+# [i if exp1 else exp2 for i in xxx]
+# 此处的if else语句主要起赋值的作用,if---else----在前
+a = [i if i>2 else 0 for i in [1,2,3,4,5]]
+print(a)
+result [0,0,3,4,5]
+# 列表生成式3  多层for循环
+# [for i in xxx for j in xxx]
+a = [i+j for i in 'abc' for j in 'mnp']
+print(a)
+result ['am','an','ap','bm','bn','bp','cm','cn','cp']
+########################################################
