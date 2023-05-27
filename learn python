@@ -107,3 +107,16 @@ favirite_number={
 }
 print(f"andy has the favirite number is {favirite_number['andy']}")
 ###########################################################################
+glossary = {
+ 'string': 'A series of characters.',
+ 'comment': 'A note in a program that the Python interpreter ignores.',
+ 'list': 'A collection of items in a particular order.',
+ 'loop': 'Work through a collection of items, one at a time.',
+ 'dictionary': "A collection of key-value pairs.",
+ }
+for keyword in glossary:
+
+    word=keyword
+    print(f"{word.title()} means {glossary[word]}, thank you")#我在想字典中怎么写循环呢？我尝试下，结果成功了。
+    
+   
