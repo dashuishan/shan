@@ -118,5 +118,21 @@ for keyword in glossary:
 
     word=keyword
     print(f"{word.title()} means {glossary[word]}, thank you")#我在想字典中怎么写循环呢？我尝试下，结果成功了。
+      #######################################################################################
+    glossary = {
+ 'string': 'A series of characters.',
+ 'comment': 'A note in a program that the Python interpreter ignores.',
+ 'list': 'A collection of items in a particular order.',
+ 'loop': 'Work through a collection of items, one at a time.',
+ 'dictionary': "A collection of key-value pairs.",
+ 'key': 'The first item in a key-value pair in a dictionary.',
+ 'value': 'An item associated with a key in a dictionary.',
+ 'conditional test': 'A comparison between two values.',
+ 'float': 'A numerical value with a decimal component.',
+ 'boolean expression': 'An expression that evaluates to True or False.',
+ }
+for key,means in glossary.items():##这里终于学会了字典的循环调用了，好开心。item（）是个宝，家家离不了。
+    print(f"\n{key}:{means}")
+##################################################################################################20230527
     
    
