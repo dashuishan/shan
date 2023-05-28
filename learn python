@@ -134,5 +134,31 @@ for keyword in glossary:
 for key,means in glossary.items():##这里终于学会了字典的循环调用了，好开心。item（）是个宝，家家离不了。
     print(f"\n{key}:{means}")
 ##################################################################################################20230527
-    
-   
+    rivers = {
+ 'nile': 'egypt',
+ 'mississippi': 'united states',
+ 'fraser': 'canada',
+'kuskokwim': 'alaska',
+ 'yangtze': 'china',
+ }
+for river,country in rivers.items():
+    print(f"-the {river.title()}  run though the {country} ")
+    print(f"-{river.title()}")
+    print(f"-{country.title()}")
+  ######################################################################################################
+favorite_languages = {
+ 'jen': 'python',
+ 'sarah': 'c',
+ 'edward': 'ruby',
+ 'phil': 'python',
+ }
+for name,language in favorite_languages.items():
+    print(f"{name.title()}  favorite language is {language.title()} ")
+coders = ['phil', 'josh', 'david', 'becca', 'sarah', 'matt', 'danielle']
+for code in coders:
+    if code in favorite_languages.keys():#注意这里的keys()，指的是字典里面的KEY值。
+        print(f"{code},thank you")
+    else:
+        print(f"{code},麻烦填写，谢谢！")
+        ####################################################################################################
+        
