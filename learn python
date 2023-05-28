@@ -161,4 +161,68 @@ for code in coders:
     else:
         print(f"{code},麻烦填写，谢谢！")
         ####################################################################################################
-        
+        people=[]
+person1 = {
+ 'first_name': 'eric',
+ 'last_name': 'matthes',
+ 'age': 43,
+ 'city': 'sitka',
+ }
+people.append(person1)
+person2 = {
+ 'first_name': 'jiang',
+ 'last_name': 'shan',
+ 'age': 23,
+ 'city': 'yichun',
+ }
+people.append(person2)
+person3 = {
+ 'first_name': 'bing',
+ 'last_name': 'gan',
+ 'age': 13,
+ 'city': 'binzhou',
+ }
+people.append(person3)
+for person in people:
+    print(f"{person['first_name']}{person['last_name']} age is {person['age']} and live in {person['city']}")
+###############################################################################看这里字典是怎么合成列表的，列表是输出每个内容的。
+pet = {
+ 'animal type': 'python',
+ 'name': 'john',
+ 'owner': 'guido',
+ 'weight': 43,
+ 'eats': 'bugs',
+}
+pets.append(pet)
+pet = {
+ 'animal type': 'chicken',
+ 'name': 'clarence',
+ 'owner': 'tiffany',
+ 'weight': 2,
+ 'eats': 'seeds',
+}
+pets.append(pet)
+pet = {
+ 'animal type': 'dog',
+ 'name': 'peso',
+ 'owner': 'eric',
+ 'weight': 37,
+ 'eats': 'shoes',
+}
+pets.append(pet)
+
+for pet in pets:
+    print(f"let us know about {pet['name']}")
+    for key,information in pet.items():
+        print(f"{key}:{information}")
+        ###############################################################
+favorite_places = {
+ 'eric': ['bear mountain', 'death valley', 'tierra del fuego'],
+ 'erin': ['hawaii', 'iceland'],
+ 'willie': ['mt. verstovia', 'the playground', 'new hampshire']
+ }
+for name,favorite_place in favorite_places.items():#我在想是不是只有字典的键值是一个的时候，才会使用这个item（）呢？
+    print(f"{name.title()} favorite places is :")
+    for place in favorite_place:
+        print(f"- {place.title()}.")
+     ##################################################################
