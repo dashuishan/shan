@@ -293,7 +293,7 @@ while True:
   prompt1="how old are you?"
 prompt1 +="\n please enter 'quit' when you are finished."
 while True:
-    prompt =input(prompt1)
+    prompt =input(prompt1)#千万注意这个input（）函数的位置，让他可以循环显示。
     if prompt=='quit':
         break
     prompt=int(prompt)
@@ -303,4 +303,41 @@ while True:
         print("the price is 10 dollor")
     elif prompt>12:
         print("the price is 15 dollor")
-        
+#####################################################################################################   
+sandwich_orders = ['veggie', 'grilled cheese', 'turkey', 'roast beef']
+finished_sandwiches = []
+
+while sandwich_orders:
+
+    for sandwich_order in sandwich_orders:
+        print(f"i made your tuna {sandwich_order} sandwich")
+        sandwich_orders.pop()
+        finished_sandwiches.append(sandwich_order)
+        print(finished_sandwiches)
+###############################################################################################这里我做的和书上不同，但是我们共同说明一个问题POP（）出来的数据是从头开始剥离的。这个程序也是错误的。哈哈 因为根本不是从头开始的，而是从尾巴上剔除的。
+sandwich_orders = ['veggie', 'grilled cheese', 'turkey', 'roast beef']
+finished_sandwiches = []
+
+while sandwich_orders:
+
+    current_sandwich=sandwich_orders.pop()
+    print(f"i made your tuna {current_sandwich} sandwich")
+    finished_sandwiches.append(current_sandwich)
+    print(finished_sandwiches)
+   ###############################################################################################应该使用这个程序
+   sandwich_orders = [
+ 'pastrami', 'veggie', 'grilled cheese', 'pastrami',
+ 'turkey', 'roast beef', 'pastrami']
+finished_sandwiches = []
+print("I'm sorry, we're all out of pastrami today.")
+for sandwich_order in sandwich_orders:
+    if sandwich_order=='pastrami':
+        sandwich_orders.remove('pastrami')
+print(sandwich_orders)
+
+while sandwich_orders:
+    current_sandwich=sandwich_orders.pop()
+    print(f"i made your tuna {current_sandwich} sandwich")
+    finished_sandwiches.append(current_sandwich)
+    print(finished_sandwiches)
+    ###############################################################
