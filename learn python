@@ -224,5 +224,46 @@ favorite_places = {
 for name,favorite_place in favorite_places.items():#我在想是不是只有字典的键值是一个的时候，才会使用这个item（）呢？
     print(f"{name.title()} favorite places is :")
     for place in favorite_place:
-        print(f"- {place.title()}.")
+        print(f"- {place.title()}.")##这个案例是字典中 一个key对应 多个数值的问题，这些数值是用列表的形式表现出来的。
      ##################################################################
+cities = {
+ 'santiago': {
+ 'country': 'chile',
+ 'population': 6_310_000,
+ 'nearby mountains': 'andes',
+ },
+ 'talkeetna': {
+ 'country': 'united states',
+ 'population': 876,
+ 'nearby mountains': 'alaska range',
+ },
+ 'kathmandu': {
+ 'country': 'nepal',
+ 'population': 975_453,
+ 'nearby mountains': 'himilaya',
+ }
+ }
+for city,informations in cities.items():
+    print(f" the city {city.title() :}")
+    for key,information in informations.items():
+        print(f"{key}：{information}")
+###############################################################这里是字典中嵌套字典的方式，我也使用了，两个for 循环的方式，跟答案使用字典的key[]方法有所不同
+message = input("Tell me something, and I will repeat it back to you: ")
+print(message.title())
+##############################################################################
+party_size=input("how many peopel are in your dinner party tonight?")
+party_size=int(party_size)
+
+if party_size>8:
+    print("没有空位")
+else:
+    print("有空位，请进来。")
+#######################################################################
+num=input("Give me a number,please:")
+num=int(num)
+
+if num%10==0:#%表示取模运算符。
+    print(f"{num}是10的倍数")
+else:
+    print(f"{num}不是10的倍数")
+####################################################################
