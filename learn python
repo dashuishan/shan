@@ -341,3 +341,22 @@ while sandwich_orders:
     finished_sandwiches.append(current_sandwich)
     print(finished_sandwiches)
     ###############################################################
+name_prompt = "\nWhat's your name? "
+place_prompt = "If you could visit one place in the world, where would it be? "
+continue_prompt = "\nWould you like to let someone else respond? (yes/no) "
+#调查结果写在字典中,如{name:place}
+respose={}
+while True:
+    name=input(name_prompt)
+    place=input(place_prompt)
+    respose[name]=place
+
+    repeat=input(continue_prompt)
+    if repeat!='yes':
+        break
+#显示调查结果
+print(respose)
+for name,place in respose.items():
+    print(f"{name} like to visit {place} in the world")
+   ############################################################################这个题目讲了字典是怎么生成的，我还一位是用append，其实字典没这个玩意。然后这种写prompt的套路其实是挺好的。
+   
