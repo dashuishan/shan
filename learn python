@@ -267,3 +267,40 @@ if num%10==0:#%表示取模运算符。
 else:
     print(f"{num}不是10的倍数")
 ####################################################################
+prompt="\n what topping would you like on your pizza?,enter 'quit' when you are finished."
+#prompt+="\n enter 'quit' when you are finished."
+
+while True:
+    topping=input(prompt)
+    if topping!='quit':
+        print(f"we will add {topping} in your pizza")
+    else:
+        break#这个是初入门while break的用法，用来中止这段话使用。
+     ########################################################################
+     prompt=input("how old are you and please enter 'quit' when you are finished.")
+while True:
+    prompt = int(prompt)
+    if prompt!='quit':#这里因为int后 肯定不是等于字符串所以会造成不停的循环。然后就会把电脑给崩溃掉。
+        if prompt<=3:
+            print("price is free")
+        elif (prompt > 3) & (prompt < 12):
+            print("the price is 10 dollor")
+        elif prompt>12:
+            print("the price is 15 dollor")
+    else:
+        break
+  ######      看我这串代码，错误的地方很多，。我这里修改了形参，造成之后的循环输出后，还有的就是我这里的input居然写在了最开始，这样就造成了死循环。因为不需要我输入数字了。真的是错误一堆堆。###########################
+  prompt1="how old are you?"
+prompt1 +="\n please enter 'quit' when you are finished."
+while True:
+    prompt =input(prompt1)
+    if prompt=='quit':
+        break
+    prompt=int(prompt)
+    if prompt<=3:
+        print("price is free")
+    elif (prompt > 3) & (prompt < 12):
+        print("the price is 10 dollor")
+    elif prompt>12:
+        print("the price is 15 dollor")
+        
