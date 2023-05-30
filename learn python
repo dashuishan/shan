@@ -416,5 +416,30 @@ def bianlifa(nums,target):
             if nums[i] + nums[j] == target:
                 #return [i, j]
                 print([i,j])
-bianlifa(num1,target1)
+bianlifa(num1,target1)#如果同一个元素在答案中不能重复出现，就需要涉及到
 ####################################################################################################################################
+def describe_city(city,country='CHINA'):
+    """描述城市"""
+    print(f"{city.title()} is in {country.title()}")
+
+describe_city('qingdao')
+describe_city('tokoyo','japan')
+describe_city('bingzhou')
+#############################################我在想是不是第一个实参必须给定呢？
+def describe_city(city,country):
+    return f"{city.title()},{country.title()}"
+    """返回一个类似于‘city,country'的字符串"""
+
+
+city=describe_city('qingdao','china')
+print(city)
+city=describe_city('tokoyo','japan')
+print(city)
+city=describe_city('bingzhou','china')
+print(city)
+
+####################################################################还是没解决实参第一个是否要给出来，但是需要注意return的用法，这里是返回一个字符串，我写的是打印字符串里面的东西。
+def make_album(artist, title):
+ """创建一个包含专辑信息的字典。"""
+ return album_list{artist:title}
+ make_album('cangjingkong','jiaoshi')
