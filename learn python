@@ -359,4 +359,33 @@ print(respose)
 for name,place in respose.items():
     print(f"{name} like to visit {place} in the world")
    ############################################################################这个题目讲了字典是怎么生成的，我还一位是用append，其实字典没这个玩意。然后这种写prompt的套路其实是挺好的。
-   
+   data=["a","b","c","d","e"]
+json = {}
+collect=[]
+for index,content in enumerate(data):
+    json['name']=data[index]
+    collect.append(json)
+    json = {}#这里把json={}带进去循环
+print(collect)
+####################在每次循环中，list会增加一个位置用于保存数据。但是json字典在循环外，虽然每次都为该字典重新赋值，但都指的是同一地址，每次赋值给字典都会引起前面所有数据的更新。因此，就会出现数据重复出现。
+
+
+data=["a","b","c","d","e"]
+json = {}
+collect=[]
+for index,content in enumerate(data):
+    collect.append({"name": data[index]})#生成一个临时变量，如果传递到list里面，他会自动给你记录，不会消失、这个涉及形参，实参，地址的知识，需要去补充一下。
+print(collect)
+#################################################################################这里是列表中生成[{},{},{}]字典数组的方法。上卖弄则是字典中字典的生成方法，所以还是有区别的。字典中字典的方法是无法使用append()函数的。
+def display_message():
+    print("我学会了啥呢？")
+display_message()
+###################################
+def favorite_book(title):
+    """显示一条消息，指出喜欢的一本图书"""
+    print(f"{title}is one of my favorite book.")
+
+favorite_book("《faust》")
+##########################################形参和实参 说明。
+
+
