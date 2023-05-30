@@ -358,7 +358,7 @@ while True:
 print(respose)
 for name,place in respose.items():
     print(f"{name} like to visit {place} in the world")
-   ############################################################################这个题目讲了字典是怎么生成的，我还一位是用append，其实字典没这个玩意。然后这种写prompt的套路其实是挺好的。
+   ############################################################################这个题目讲了字典是怎么生成的，我还以为是用append，其实字典没这个玩意。然后这种写prompt的套路其实是挺好的。
    data=["a","b","c","d","e"]
 json = {}
 collect=[]
@@ -443,3 +443,11 @@ def make_album(artist, title):
  """创建一个包含专辑信息的字典。"""
  return album_list{artist:title}
  make_album('cangjingkong','jiaoshi')
+ 
+ def make_album(artist, title):
+
+album_dict ={'artist':artist.title(),'title'=title.title(),}
+return album_dict
+information=make_album('zhoujielun','qilixiang')
+print(information)
+album_dict= dict(artist=artist.title(), title=title.title())
