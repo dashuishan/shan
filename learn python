@@ -387,5 +387,34 @@ def favorite_book(title):
 
 favorite_book("《faust》")
 ##########################################形参和实参 说明。
+def make_skirt(size,message):
+    """描述需要只做什么样的T恤"""
+    print(f"这件T恤需要的尺寸是{size}")
+    print(f"这件T恤需要印刷的字是{message}")
 
+make_skirt(3,"我爱吃饼干")
+make_skirt(message="我要饼干",size="E")
+#################################################
+def make_skirt(size='large',message='i love Python'):
+    """描述需要只做什么样的T恤"""
+    print(f"这件T恤需要的尺寸是{size}")
+    print(f"这件T恤需要印刷的字是{message}")
 
+make_skirt()#打印默认样子
+make_skirt(size="medium")#打印默认字，尺寸选择中
+make_skirt(message='i love binggan')#打印默认尺寸，选择字为定制的。
+##########################################################如果需要设置默认属性，必须再定义的过程中，把所有的形参都给个默认的定义，如果少一个，会报错
+题目是：
+给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
+你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
+你可以按任意顺序返回答案。
+num1 = [2,7,11,15]
+target1 = 9
+def bianlifa(nums,target):
+    for i in range(0, len(nums) - 1):
+        for j in range(i + 1, len(nums)):
+            if nums[i] + nums[j] == target:
+                #return [i, j]
+                print([i,j])
+bianlifa(num1,target1)
+####################################################################################################################################
