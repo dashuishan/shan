@@ -565,6 +565,27 @@ def make_car(manufacturer,model,**options):
     for option,value in options.items():
         car_dict[option]=value
         #option1={'value':value,'option':option}
-    car_dict.update(options)
+    car_dict.update(options)#这一行也可以不要 不要不要！
     print(car_dict)
 car = make_car('subaru', 'outback', color='blue', tow_package=True)
+##################################################这里看到**options就是字典的处理方法了，其实并没有把options处理到字典中，只是对他进行了键值对的定义就可以了，相当简约！
+class Restaurant():
+    """一个表示餐厅的类"""
+    def __init__(self,name,cuisine_type):
+        """初始化餐厅"""
+        self.name=name
+        self.cuisine_type=cuisine_type
+    def describe_restaurant(self):
+        """描述餐厅"""
+        print(f"the restaurant name is{self.name},and is a {self.cuisine_type} restaurant")
+    def open_restaurant(self):
+        """餐厅是否开门"""
+        print("the restaurant is opening")
+
+restaurant=Restaurant('binggan','love')
+print(restaurant.name)
+print(restaurant.cuisine_type)
+
+restaurant.describe_restaurant()
+restaurant.open_restaurant()
+###########################################################在类中方法后面的self是不能少的，不然会报错。
