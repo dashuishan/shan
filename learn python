@@ -490,3 +490,33 @@ print(mao)
 chen=make_album("chenyixun","ten years",track=8)
 print(chen)
 ##########################################################################################
+def make_album(artist, title,track=0):
+    """创建一个包含专辑信息,数量的字典"""
+    album_dict=dict(art=artist.title(),tit=title.title())#传入关键字
+    if track!=0:
+        album_dict['track']=track
+
+    return album_dict
+artist_prompt="\n 请输入歌手名字,If you need to leave ,please enter quit"
+title_prompt="请输入专辑名字"
+track_prompt="请输入专辑的歌曲数量"
+#coutinue_prompt=" If you need to leave ,please enter quit"#这个是退出的，不需要单独赋值了
+while True:
+    print("If you need to leave ,please enter quit")
+    artist=input(artist_prompt)
+    if artist=='quit':
+        break
+    title=input(title_prompt)
+    if title=='quit':
+        break
+    track=input(track_prompt)
+    if track=='quit':
+        break
+    chen=make_album(artist,title,track)
+    print(chen)
+    #############################################################################################将前段的学习集大成了，这里设置了随时quit的停止机制，使用了while的总领和使用函数的赋值机制。同时再次说明了input（）这种东西的标准写法prompt应该是写在前面的。
+    def show_messages(messages):
+    """打印每个文本信息"""
+    print(f"{messages}")
+show_messages("我爱你")
+############################################################################################################
