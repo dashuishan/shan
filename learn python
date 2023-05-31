@@ -548,7 +548,7 @@ def make_sandwich(*items):
 make_sandwich('roast beef', 'cheddar cheese', 'lettuce', 'honey dijon')
 make_sandwich('turkey', 'apple slices', 'honey mustard')
 make_sandwich('peanut butter', 'strawberry jam')
-#########################主要是两个意义（*item）这个形参的用法是说不知道需要输入多少个形参，他的类型属于tuple(元组）的形式，另外元组的调用就可以使用fo in这样的方式了。形参中还有*kwargs，这种是属于字典的类型。
+#########################主要是两个意义（*item）这个形参的用法是说不知道需要输入多少个形参，他的类型属于tuple(元组）的形式，另外元组的调用就可以使用fo in这样的方式了。形参中还有*kwargs，这种是属于字典的类型。见下面所述。
 使用场景：你可以将不定数量的参数传递给一个函数。不定的意思是：预先并不知道, 函数使用者会传递多少个参数给你, 所以在这个场景下使用这两个关键字。其实并不是必须写成 *args 和 **kwargs。 *(星号) 才是必须的. 你也可以写成 *ar 和 k 。而写成 *args 和kwargs 只是一个通俗的命名约定。
 *args 表示任何多个无名参数，它本质是一个 tuple。
 **kwargs 表示关键字参数，它本质上是一个 dict。
@@ -559,3 +559,12 @@ fun(1, 2, 3, 4, A='a', B='b', C='c', D='d')
 ~args = (1, 2, 3, 4)
 ~kwargs = {'A': 'a', 'B': 'b', 'C': 'c', 'D': 'd'}
 ##############################################################################################################################
+def make_car(manufacturer,model,**options):
+    """创建一个表示汽车属性的字典"""
+    car_dict={'manufacturer':manufacturer,'model':model}
+    for option,value in options.items():
+        car_dict[option]=value
+        #option1={'value':value,'option':option}
+    car_dict.update(options)
+    print(car_dict)
+car = make_car('subaru', 'outback', color='blue', tow_package=True)
