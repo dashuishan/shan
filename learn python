@@ -440,14 +440,53 @@ print(city)
 
 ####################################################################还是没解决实参第一个是否要给出来，但是需要注意return的用法，这里是返回一个字符串，我写的是打印字符串里面的东西。
 def make_album(artist, title):
- """创建一个包含专辑信息的字典。"""
- return album_list{artist:title}
- make_album('cangjingkong','jiaoshi')
- 
- def make_album(artist, title):
+    """创建一个包含专辑信息的字典"""
+    album_dict=dict(art=artist.title(),tit=title.title())#传入关键字
+    return album_dict
 
-album_dict ={'artist':artist.title(),'title'=title.title(),}
-return album_dict
-information=make_album('zhoujielun','qilixiang')
-print(information)
-album_dict= dict(artist=artist.title(), title=title.title())
+zhou=make_album("zhoujielun","qinghuaci")
+print(zhou)
+mao=make_album("maoamin","sinian")
+print(mao)
+chen=make_album("chenyixun","ten years")
+print(chen)############我是用dict()创建的，而下面这种习题答案，作者是用原始的{}创建的，我喜欢我的这种方式，而且我对形参有了更好的书写方式。
+def make_album(artist, title):
+ """创建一个包含专辑信息的字典。"""
+ album_dict = {
+ 'artist': artist.title(),
+ 'title': title.title(),
+ }
+ return album_dict
+album = make_album('metallica', 'ride the lightning')
+print(album)
+album = make_album('beethoven', 'ninth symphony')
+print(album)
+######################################################################################
+字典创建的三种方法：##纠结很久的方法。虽然简单。
+1、dic={}#创建一个空的字典外型，这样的type就是字典了。
+2、dic2=dict()#
+>>>dict()                        # 创建空字典
+构建字典的方法如下三种比较常见。
+>>> dict(a='a', b='b', t='t')     # 传入关键字
+{'a': 'a', 'b': 'b', 't': 't'}
+>>> dict(zip(['one', 'two', 'three'], [1, 2, 3]))   # 映射函数方式来构造字典
+{'three': 3, 'two': 2, 'one': 1} 
+>>> dict([('one', 1), ('two', 2), ('three', 3)])    # 可迭代对象方式来构造字典
+{'three': 3, 'two': 2, 'one': 1}
+3、dic3={key1:value1,key2:value2}#直接赋值。
+########################################################################################
+def make_album(artist, title,track=0):
+    """创建一个包含专辑信息,数量的字典"""
+    album_dict=dict(art=artist.title(),tit=title.title())#传入关键字
+    if track!=0:
+        album_dict['track']=track
+
+    return album_dict
+
+zhou=make_album("zhoujielun","qinghuaci")
+print(zhou)
+mao=make_album("maoamin","sinian")
+print(mao)
+chen=make_album("chenyixun","ten years",track=8)
+print(chen)
+##########################################################################################
