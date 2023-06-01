@@ -186,6 +186,7 @@ people.append(person3)
 for person in people:
     print(f"{person['first_name']}{person['last_name']} age is {person['age']} and live in {person['city']}")
 ###############################################################################看这里字典是怎么合成列表的，列表是输出每个内容的。
+pets=[]
 pet = {
  'animal type': 'python',
  'name': 'john',
@@ -210,7 +211,6 @@ pet = {
  'eats': 'shoes',
 }
 pets.append(pet)
-
 for pet in pets:
     print(f"let us know about {pet['name']}")
     for key,information in pet.items():
@@ -589,3 +589,71 @@ print(restaurant.cuisine_type)
 restaurant.describe_restaurant()
 restaurant.open_restaurant()
 ###########################################################在类中方法后面的self是不能少的，不然会报错。
+class Restaurant():
+    """一个表示餐厅的类"""
+    def __init__(self,name,cuisine_type):
+        """初始化餐厅"""
+        self.name=name
+        self.cuisine_type=cuisine_type
+    def describe_restaurant(self):
+        """描述餐厅"""
+        print(f"the restaurant name is{self.name},and is a {self.cuisine_type} restaurant")
+    def open_restaurant(self):
+        """餐厅是否开门"""
+        print("the restaurant is opening")
+
+bing_gan=Restaurant('binggan','love')
+bing_gan.describe_restaurant()
+
+wan_er=Restaurant('waner','young')
+wan_er.describe_restaurant()
+
+mi_tao=Restaurant('mitao','friend')
+mi_tao.describe_restaurant()
+##################################################################无他，不需看
+class User():
+    """一个表示用户的简单类"""
+    def __init__(self,first_name,last_name,username,email,location):
+        """初始化用户"""
+        self.first_name=first_name
+        self.last_name=last_name
+        self.username=username
+        self.email=email
+        self.location=location
+    def describe_user(self):
+        print(f"{self.username},your email is {self.email},and location is {self.location}")
+    def greet_user(self):
+        print(f"{self.username} you are welcome")
+
+eric = User('eric', 'matthes', 'e_matthes', 'e_matthes@example.com', 'alaska')
+eric.describe_user()
+eric.greet_user()
+###########################################################类的属性只能在__init__()中表达吗？在类后面的（）中可以写什么东西吗？还有方法后面的（）只能是self吗？可以定义一些吗？
+class Restaurant():
+    """一个表示餐厅的类"""
+    def __init__(self,name,cuisine_type，number_served=0:
+        """初始化餐厅"""
+        self.name=name
+        self.cuisine_type=cuisine_type
+    def describe_restaurant(self):
+        """描述餐厅"""
+        print(f"the restaurant name is{self.name},and is a {self.cuisine_type} restaurant")
+    def open_restaurant(self):
+        """餐厅是否开门"""
+        print("the restaurant is opening")
+    def set_number_served(self,number_served)):
+        """能够设置就餐人数"""
+        self.number_served = number_served
+        print({self.number_served})
+    def increment_number_served(self,addnumber_served):
+        """能够增加用餐人数"""
+        self.number_served+=self.addnumber_served
+
+bing_gan=Restaurant('binggan','love')
+bing_gan.describe_restaurant()
+
+wan_er=Restaurant('waner','young')
+wan_er.describe_restaurant()
+
+mi_tao=Restaurant('mitao','friend')
+mi_tao.describe_restaurant()
