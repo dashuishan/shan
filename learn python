@@ -631,7 +631,7 @@ eric.greet_user()
 ###########################################################类的属性只能在__init__()中表达吗？在类后面的（）中可以写什么东西吗？还有方法后面的（）只能是self吗？可以定义一些吗？
 class Restaurant():
     """一个表示餐厅的类"""
-    def __init__(self,name,cuisine_type，number_served=0:
+    def __init__(self,name,cuisine_type,number_served=0):
         """初始化餐厅"""
         self.name=name
         self.cuisine_type=cuisine_type
@@ -641,19 +641,54 @@ class Restaurant():
     def open_restaurant(self):
         """餐厅是否开门"""
         print("the restaurant is opening")
-    def set_number_served(self,number_served)):
+    def set_number_served(self,number_served):
         """能够设置就餐人数"""
         self.number_served = number_served
-        print({self.number_served})
+        print(f"the restaurant have {self.number_served} people inside")
     def increment_number_served(self,addnumber_served):
         """能够增加用餐人数"""
-        self.number_served+=self.addnumber_served
+        self.number_served+=addnumber_served#这里的累加没有用self.addnumber_served，如果用了就报错。为什么呢？
+        print(f"餐厅共有{self.number_served}人")
 
 bing_gan=Restaurant('binggan','love')
 bing_gan.describe_restaurant()
+bing_gan.set_number_served(1257)
+bing_gan.increment_number_served(30)
+#######################################################################################回答了类中方法后面的（）只能是self吗？可以定义一些吗？这个问题
+class User():
+    """一个表示用户的简单类"""
+    def __init__(self,first_name,last_name,username,email,location):
+        """初始化用户"""
+        self.first_name=first_name
+        self.last_name=last_name
+        self.username=username
+        self.email=email
+        self.location=location
+        self.login_attempts=0
+    def describe_user(self):
+        print(f"{self.username},your email is {self.email},and location is {self.location}")
+    def greet_user(self):
+        print(f"{self.username} you are welcome")
 
-wan_er=Restaurant('waner','young')
-wan_er.describe_restaurant()
+    def increment_login_attempts(self):
+        """将属性 login_attempts 的值加 1。"""
+        self.login_attempts+=1
+        print(self.login_attempts)
+    def reset_login_attempts(self):
+        """将属性 login_attempts 重置为0。"""
+        self.login_attempts=0
 
-mi_tao=Restaurant('mitao','friend')
-mi_tao.describe_restaurant()
+
+eric = User('eric', 'matthes', 'e_matthes', 'e_matthes@example.com', 'alaska')
+eric.describe_user()
+eric.greet_user()
+
+print("\nMaking 3 login attempts...")
+eric.increment_login_attempts()
+eric.increment_login_attempts()
+eric.increment_login_attempts()
+print(f" Login attempts: {eric.login_attempts}")
+print("Resetting login attempts...")
+eric.reset_login_attempts()
+print(f" Login attempts: {eric.login_attempts}")
+##################################################################在类中新加了一个属性self.login_attempts=0，在前面没有定义，在__init__()的（）内没有定义，在下面进行了补充。实例中也没有加上这个形参呢！但是还是可以进行相关之操作。
