@@ -769,3 +769,57 @@ eric.describe_user()#这里调用父类的方法
 eric.show_privileges()
 ################注意这里super()__init__()的方法是没有：的。而且在python2.7版本中使用的方法也是不一样。
 ###############################################################################################################################
+class User():
+    """一个表示用户的简单类"""
+    def __init__(self,first_name,last_name,username,email,location):
+        """初始化用户"""
+        self.first_name=first_name
+        self.last_name=last_name
+        self.username=username
+        self.email=email
+        self.location=location
+        self.login_attempts=0
+    def describe_user(self):
+        """"显示用户信息"""
+        print(f"{self.username},your email is {self.email},and location is {self.location}")
+    def greet_user(self):
+        """"显示用户被欢迎"""
+        print(f"{self.username} you are welcome")
+
+    def increment_login_attempts(self):
+        """将属性 login_attempts 的值加 1。"""
+        self.login_attempts+=1
+        print(self.login_attempts)
+    def reset_login_attempts(self):
+        """将属性 login_attempts 重置为0。"""
+        self.login_attempts=0
+class Admin(User):
+    """描述admin的类"""
+    def __init__(self, first_name, last_name, username, email, location):
+        """"初始化管理员"""
+        super().__init__(first_name, last_name, username, email, location)
+        self.privileges=Privileges()
+
+
+class Privileges():
+    """描述privilges的类"""
+    def __init__(self,privileges=[]):#这里必须先赋值，因为前面已经被引用了，不赋值会报错。TypeError: __init__() missing 1 required positional argument: 'privileges'
+        """初始化admin的类"""
+        self.privileges=privileges
+    def show_privileges(self):
+        """显示用户权限"""
+        print("the admin have these privileges")
+        for privilege in self.privileges:  # 注意这里self.privileges。
+            print(f" -{privilege}")
+
+eric = Admin('eric', 'matthes', 'e_matthes', 'e_matthes@example.com', 'alaska')
+eric.describe_user()#这里调用父类的方法
+eric.privileges.show_privileges()#两个类之间互相调用，这是现在常用的方式，叫做类的聚合，其实继承用的比较多一些。
+eric_privileges = [
+ 'can reset passwords',
+ 'can moderate discussions',
+ 'can suspend accounts',
+ ]
+eric.privileges.privileges = eric_privileges
+eric.privileges.show_privileges()
+###########################################################################################这里用了类的聚合和继承方法，做了此题感觉越来越接近实用了。
