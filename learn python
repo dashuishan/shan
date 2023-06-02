@@ -692,3 +692,80 @@ print("Resetting login attempts...")
 eric.reset_login_attempts()
 print(f" Login attempts: {eric.login_attempts}")
 ##################################################################在类中新加了一个属性self.login_attempts=0，在前面没有定义，在__init__()的（）内没有定义，在下面进行了补充。实例中也没有加上这个形参呢！但是还是可以进行相关之操作。
+class Restaurant():
+    """一个表示餐厅的类"""
+    def __init__(self,name,cuisine_type,number_served=0):
+        """初始化餐厅"""
+        self.name=name
+        self.cuisine_type=cuisine_type
+    def describe_restaurant(self):
+        """描述餐厅"""
+        print(f"the restaurant name is{self.name},and is a {self.cuisine_type} restaurant")
+    def open_restaurant(self):
+        """餐厅是否开门"""
+        print("the restaurant is opening")
+    def set_number_served(self,number_served):
+        """能够设置就餐人数"""
+        self.number_served = number_served
+        print(f"the restaurant have {self.number_served} people inside")
+    def increment_number_served(self,addnumber_served):
+        """能够增加用餐人数"""
+        self.number_served+=addnumber_served#这里的累加没有用self.addnumber_served，如果用了就报错。为什么呢？
+        print(f"餐厅共有{self.number_served}人")
+class IceCreamStand(Restaurant):
+    """一个表示冰激凌的小店"""
+    def __init__(self,name,cuisine_type='icecreamstand',number_served=0):#试过不用书写这么多属性也可以的，但一般情况都可以写上去。
+        """初始化父类的属性，表示接受父类Restaurant父类"""
+        super().__init__(name,cuisine_type)#super()是一个特殊函数，帮助Python将父类和子类关联起来。这行代码让Python调用Restaurant的父类的方法__init__()，让IceCreamStand实例包含父类的所有属性。
+        self.flavors=[]
+    def show_icecream(self):
+        for flavor in self.flavors:
+            print(f"we have the follwing icecream -{flavor}")
+
+big_one = IceCreamStand('The Big One')
+big_one.flavors = ['vanilla', 'chocolate', 'black cherry']
+big_one.describe_restaurant()
+big_one.show_icecream()
+#######################################################################################################################
+class User():
+    """一个表示用户的简单类"""
+    def __init__(self,first_name,last_name,username,email,location):
+        """初始化用户"""
+        self.first_name=first_name
+        self.last_name=last_name
+        self.username=username
+        self.email=email
+        self.location=location
+        self.login_attempts=0
+    def describe_user(self):
+        """"显示用户信息"""
+        print(f"{self.username},your email is {self.email},and location is {self.location}")
+    def greet_user(self):
+        """"显示用户被欢迎"""
+        print(f"{self.username} you are welcome")
+
+    def increment_login_attempts(self):
+        """将属性 login_attempts 的值加 1。"""
+        self.login_attempts+=1
+        print(self.login_attempts)
+    def reset_login_attempts(self):
+        """将属性 login_attempts 重置为0。"""
+        self.login_attempts=0
+class Admin(User):
+    """描述admin的类"""
+    def __init__(self, first_name, last_name, username, email, location):
+        """"初始化管理员"""
+        super().__init__(first_name, last_name, username, email, location)
+        self.privileges=["can add post","can delete post","can ban user"]
+    def show_privileges(self):
+        """显示用户权限"""
+        print("the admin have these privileges")
+        for privilege in self.privileges:#注意这里
+            print(f" -{privilege}")
+
+eric = Admin('eric', 'matthes', 'e_matthes', 'e_matthes@example.com', 'alaska')
+eric.describe_user()#这里调用父类的方法
+#eric.privileges = ['can reset passwords','can moderate discussions','can suspend accounts',]
+eric.show_privileges()
+################注意这里super()__init__()的方法是没有：的。而且在python2.7版本中使用的方法也是不一样。
+###############################################################################################################################
