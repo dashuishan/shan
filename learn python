@@ -949,3 +949,13 @@ for i in range(1,11):
     results.append(result)
 print(results)
 ############################################################################################
+from random import choice,sample
+possibilities = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'a', 'b', 'c', 'd', 'e']
+#没有随机取出来即有数据，又有数字的随机数组函数，sample只能取出来数字。choice可以随机取出来一个值，这个值可以是数字或者字符
+ticket_list=[]
+while len(ticket_list)<4:
+    L1=choice(possibilities)
+    if L1 not in ticket_list:
+        ticket_list.append(L1)
+print(ticket_list）
+######################################################这个程序的意思是在列表中取出来四个个不重复的四个数组，组成一个新的列表。与题目的意思完全不一样。
