@@ -1001,3 +1001,7 @@ if won:
     print(f"{n},you win,congratuations!")
 else:
     print("you are fail")
+"""1、这里的while用法需要注意，如果后面接着的是True，那么才能循环，才能走下去。这一点决定是否需要在前面加not
+2、这里面没有用cless，只用了def函数就实现了所有的功能，所以是否需要class需要仔细考虑
+3、使用return 而不是print，告别野生程序员
+4、def（）这个（）中的参数是可以手动赋值的，是很重要的"""
