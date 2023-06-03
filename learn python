@@ -959,3 +959,45 @@ while len(ticket_list)<4:
         ticket_list.append(L1)
 print(ticket_list）
 ######################################################这个程序的意思是在列表中取出来四个个不重复的四个数组，组成一个新的列表。与题目的意思完全不一样。
+from random import choice,sample
+def get_win_ticket(possibilities):
+    """摇出来四个数据组成一个数组作为我们抽出来的结果"""
+#没有随机取出来即有数据，又有数字的随机数组函数，sample只能取出来数字。choice可以随机取出来一个值，这个值可以是数字或者字符
+    win_ticket=[]
+    while len(win_ticket)<4:
+        L1=choice(possibilities)
+        if L1 not in win_ticket:
+            win_ticket.append(L1)
+    return win_ticket
+def check_ticket(win_ticket,my_ticket):
+    """判断是否中奖"""
+    for l1 in my_ticket:
+        if l1 not in win_ticket:
+            return False
+    return True
+def get_my_ticket(possibilities):
+    """抽出来的四个数据"""
+    my_ticket=[]
+    while len(my_ticket)<4:
+        L1=choice(possibilities)
+        if L1 not in my_ticket:
+            my_ticket.append(L1)
+    return my_ticket
+
+possibilities = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'a', 'b', 'c', 'd', 'e']
+win_ticket=get_win_ticket(possibilities)
+print(win_ticket)
+n=0
+won = False
+max_tries=1000
+while not won:
+    my_ticket = get_my_ticket(possibilities)
+    won = check_ticket(win_ticket, my_ticket)
+    n+=1
+    if n>=max_tries:
+        won=False
+        break
+if won:
+    print(f"{n},you win,congratuations!")
+else:
+    print("you are fail")
