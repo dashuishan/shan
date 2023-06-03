@@ -902,3 +902,50 @@ print("\nTry upgrading the battery a second time.")
 my_tesla.battery.upgrade_battery()
 my_tesla.battery.describe_battery()
 ###############################################################################这里联合调用的方案更加明显，回顾了课本中的案例，类的聚合用法太多了。且更加熟练。这个题目的85是错的，程序根本无法运行。需改正。
+from random import randint
+class Die:
+    """表征一个骰子的类"""
+    def __init__(self,sides=6):
+        """初始化骰子"""
+        self.sides=sides
+    def roll_die(self):
+        """定义一种掷骰子的方法,返回1到骰子面数之间的随机整数"""
+        x = randint(1, self.sides)
+        return x
+# d6=Die(sides=6)
+# print("开始投掷一个面数6的骰子，观察他的面数")
+# for i in range(1,11):
+#     d6.roll_die()
+#
+# d20=Die(sides=20)
+# print("开始投掷一个面数20的骰子，观察他的面数")
+# for i in range(1,11):
+#     d20.roll_die()
+#
+# d10=Die(sides=10)
+# print("开始投掷一个面数10的骰子，观察他的面数")
+# for i in range(1,11):
+#     d10.roll_die()
+#以上是野生程序员写的，一般的输出使用list形式给出，如下所示：
+results=[]
+d6=Die(sides=6)
+print("开始投掷一个面数6的骰子，观察他的面数")
+for i in range(1,11):
+    result=d6.roll_die()
+    results.append(result)
+print(results)
+
+d20=Die(sides=20)
+print("开始投掷一个面数20的骰子，观察他的面数")
+for i in range(1,11):
+    result=d20.roll_die()
+    results.append(result)
+print(results)
+
+d10=Die(sides=10)
+print("开始投掷一个面数10的骰子，观察他的面数")
+for i in range(1,11):
+    result=d10.roll_die()
+    results.append(result)
+print(results)
+############################################################################################
