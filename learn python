@@ -1035,3 +1035,14 @@ name=input("请输入姓名")
 with open(filename,'w') as f:
     f.write(name)
 #############################################################这种写法会把这个文档中的所有东西清空，然后里面的打开后只看到输入的东西。
+
+filename = 'guest_book.txt'
+print("Enter 'quit' when you are finished.")
+while True:
+    name=input("please enter your name")
+    if name=='quit':
+        break
+    with open(filename,'a') as f:
+        f.write(f"{name}\n")
+    print(f"{name},you are welcome,you've been added to the guest book.!")
+  #############################################################1、这里使用了with open(filename,'a') as f，表示添加功能。2、f"{name}\n"这里增加了回车键，是类似与打印的方式。
