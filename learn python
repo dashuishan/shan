@@ -1045,4 +1045,16 @@ while True:
     with open(filename,'a') as f:
         f.write(f"{name}\n")
     print(f"{name},you are welcome,you've been added to the guest book.!")
-  #############################################################1、这里使用了with open(filename,'a') as f，表示添加功能。2、f"{name}\n"这里增加了回车键，是类似与打印的方式。
+  #############################################################1、这里使用了with open(filename,'a') as f，表示添加功能。2、f"{name}\n"这里在保存的地方增加了回车键，是类似与打印的方式。
+filename = 'programming_poll.txt'
+responses = []
+while True:
+    response = input("\nWhy do you like programming? ")
+    responses.append(response)
+    continue_poll = input("Would you like to let someone else respond? (y/n) ")
+    if continue_poll != 'y':
+        break
+with open(filename, 'a') as f:
+    for response in responses:
+        f.write(f"{response}\n")
+####################################这种套路真是思路非常之清晰。
