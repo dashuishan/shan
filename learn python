@@ -1005,3 +1005,33 @@ else:
 2、这里面没有用cless，只用了def函数就实现了所有的功能，所以是否需要class需要仔细考虑
 3、使用return 而不是print，告别野生程序员
 4、def（）这个（）中的参数是可以手动赋值的，是很重要的"""
+##############################################################################################
+filename='learning_python.txt'
+print("--- Reading in the entire file:")
+with open(filename) as f:
+    content=f.read()
+print(content)
+
+print("\n--- Looping over the lines:")
+with open(filename) as f:
+    for line in f:
+        print(line.rstrip())
+
+print("\n--- Storing the lines in a list:")
+with open(filename) as f:
+    lines=f.readlines()#注意这里是readlines()而不是readline(),后者只能读出来一行数据。
+    for line in lines:
+        print(line.rstrip())
+   #########################################################################################
+   filename='learning_python.txt'
+print("\n--- Storing the lines in a list:")
+with open(filename) as f:
+    lines=f.readlines()#注意这里是readlines()而不是readline(),后者只能读出来一行数据。
+    for line in lines:
+        print(line.rstrip().replace('Python','C'))
+   #####################################################################################
+   filename='learning_python.txt'
+name=input("请输入姓名")
+with open(filename,'w') as f:
+    f.write(name)
+#############################################################这种写法会把这个文档中的所有东西清空，然后里面的打开后只看到输入的东西。
