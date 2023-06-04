@@ -1058,3 +1058,32 @@ with open(filename, 'a') as f:
     for response in responses:
         f.write(f"{response}\n")
 ####################################这种套路真是思路非常之清晰。
+print("Enter 'q' at any time to quit.\n")
+while True:
+    try:
+        x = input("please enter a number")
+        if x == "q":
+            break
+        x = int(x)
+        y = input("please enter another number")
+        if y == "q":
+            break
+        y = int(y)
+
+    except ValueError:
+        print("i really nead a number")
+        #continue
+    else:
+        z = x + y
+        print(f"the two number{x} &{y}have result is {z}")
+      ############################################################使用了while来实现这个循环，而不是用continue来实现的。
+      filenames = ['cats.txt','dogs.txt']
+try:
+    for filename in filenames:
+        print(f"we will read this file {filename}")
+        with open(filename) as f:
+            content=f.read()
+            print(content)
+except ValueError:
+    print("i cannot find this file.")
+################################################将多个文件做到列表中进行读取。是非常具有现实意义的。这里不需要while，因为不需要循环读取。
