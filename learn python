@@ -1126,3 +1126,28 @@ def count_common_words(filename, word):
 filename = 'alice.txt'
 count_common_words(filename, 'the')
 #######################################################################
+import json
+number=input("what is  your favorite number?")
+filename='favorite_number.json'
+with open(filename,'w')as f:
+    json.dump(number,f)
+    print("thank you ,we remember that ")
+
+with open(filename,'r')as f:
+    what=json.load(f)
+    print(f"i know your favorite number!it is {what}")
+####json.dump()用于将dict类型的数据转成str，并写入到json文件中。可以将数据写入json文件,json.load()用于.json.load()主要用来读json文件函数
+import json
+try:
+    with open('favorite_number.json', 'r')as f:
+        what = json.load(f)
+
+except FileNotFoundError:
+    number = input("what is  your favorite number?")
+    with open('favorite_number.json', 'w')as f:
+        json.dump(number, f)
+        print("thank you ,we remember that ")
+else:
+    print(f"i know your favorite number!it is {what}")
+   ##############################################################用except（）来判断错误类型然后做选择，而不是用if，这是不是比较主流的做法呢？但是这个对错误类型要求很高，在本例中很容易超过错误原因。例如存在文件夹，但是文件是空的。
+   
