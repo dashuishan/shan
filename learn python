@@ -1185,3 +1185,16 @@ def greet_user():
         print(f"We'll remember you when you come back, {username}!")
 greet_user()
 ##############################################################################################def 读取数据，如果没有则none, def新增数据，def针对不同用户调用不同的方法。很严谨的感觉。
+import unittest
+from city_functions import city_country
+class CitiesTestCase(unittest.TestCase):
+    """测试 city_functions.py。"""
+
+    def test_city_country(self):
+        """传入简单的城市和国家可行吗？"""
+        santiago_chile = city_country('santiago', 'chile')
+        self.assertEqual(santiago_chile, 'Santiago, Chile')
+if __name__ == '__main__':
+ unittest.main()
+#####https://blog.csdn.net/weixin_45444133/article/details/119971985
+#####assertEqual(a,b)表示核实a == b 
