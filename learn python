@@ -1150,4 +1150,38 @@ except FileNotFoundError:
 else:
     print(f"i know your favorite number!it is {what}")
    ##############################################################用except（）来判断错误类型然后做选择，而不是用if，这是不是比较主流的做法呢？但是这个对错误类型要求很高，在本例中很容易超过错误原因。例如存在文件夹，但是文件是空的。
-   
+import json
+def get_stored_username():
+    """Get stored username if available."""
+    filename = 'username.json'
+    try:
+        with open(filename) as f:
+            username = json.load(f)
+    except FileNotFoundError:
+        return None
+    else:
+        return username
+
+def get_new_username():
+    """Prompt for a new username."""
+    username = input("What is your name? ")
+    filename = 'username.json'
+    with open(filename, 'w') as f:
+        json.dump(username, f)
+    return username
+
+def greet_user():
+    """Greet the user by name."""
+    username = get_stored_username()
+    if username:
+        ask_username=input(f"(are you {username}? y/n)")
+        if ask_username=='y':
+            print(f"Welcome back, {username}!")
+        else:
+            username = get_new_username()
+            print(f"We'll remember you when you come back, {username}!")
+    else:
+        username = get_new_username()
+        print(f"We'll remember you when you come back, {username}!")
+greet_user()
+##############################################################################################def 读取数据，如果没有则none, def新增数据，def针对不同用户调用不同的方法。很严谨的感觉。
