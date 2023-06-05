@@ -1076,8 +1076,8 @@ while True:
     else:
         z = x + y
         print(f"the two number{x} &{y}have result is {z}")
-      ############################################################使用了while来实现这个循环，而不是用continue来实现的。
-      filenames = ['cats.txt','dogs.txt']
+#############################################################使用了while来实现这个循环，而不是用continue来实现的。
+filenames = ['cats.txt','dogs.txt']
 try:
     for filename in filenames:
         print(f"we will read this file {filename}")
@@ -1086,4 +1086,43 @@ try:
             print(content)
 except ValueError:
     print("i cannot find this file.")
-################################################将多个文件做到列表中进行读取。是非常具有现实意义的。这里不需要while，因为不需要循环读取。
+#将多个文件做到列表中进行读取。是非常具有现实意义的。这里不需要while，因为不需要循环读取。我这种写法是非常业余的写法，下面是官方所写的
+filenames = ['cats.txt','dogs.txt']
+for filename in filenames:
+    try:
+        with open(filename) as f:
+            content=f.read()
+    except FileNotFoundError:
+        print("i cannot find this file.")
+    else:
+        print(f"\n Reading file:{filename}")
+        print(content)
+ ####################################################################说明不用else:也可以写完这个程序的。
+def count_common_words(filename, word):
+    """计算指定的单词在图书中出现了多少次。"""
+ # 请注意，这里计算得到的结果并不准确，比实际出现的次数要多。"""
+
+    with open(filename,encoding='UTF-8') as f:
+        lines=f.readlines()
+        n=0
+        for line in lines:
+            n+=line.lower().count(word)
+        print(n)
+
+filename='alice.txt'
+count_common_words(filename,'the')
+#我还以为必须一行行的读取才能取到重复的次数后来发现不需要这么麻烦，用f.read()读取就可以了。其实也不需要try， excepet ，else吧，错了 或者没有这个文件让他自己报错就是了，目前我这么认为的。以下是官方写的程序。
+def count_common_words(filename, word):
+    try:
+
+        with open(filename, encoding='utf-8') as f:
+            contents = f.read()
+    except FileNotFoundError:
+        pass
+    else:
+        word_count = contents.lower().count(word)
+        msg = f"'{word}' appears in {filename} about {word_count} times."
+        print(msg)
+filename = 'alice.txt'
+count_common_words(filename, 'the')
+#######################################################################
