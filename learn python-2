@@ -7,3 +7,32 @@ plt.style.use('seaborn')
 fig, ax = plt.subplots()
 """这里fig和ax是两个subplots()的返回对象，名称当然可以自定义,fig 即figure画窗,ax即axex，画窗中的笛卡尔坐标系"""
 ax.scatter(x_values, cubes, edgecolor='none', s=40)
+#绘制三点图的函数scatter(x, y, s=None, c=None, marker=None, cmap=None, norm=None, vmin=None, vmax=None, alpha=None, linewidths=None, verts=None, edgecolors=None, hold=None, data=None, **kwargs)
+# 设置图表名称和坐标轴名称。
+ax.set_title("Cubes", fontsize=24)
+ax.set_xlabel('Value', fontsize=14)
+ax.set_ylabel('Cube of Value', fontsize=14)
+
+# 设置刻度标签的大小。
+ax.tick_params(axis='both', labelsize=14)
+plt.show()#现实图形
+import matplotlib.pyplot as plt
+#定义数据
+x_values=list(range(1,5001))
+cubes=[x**3 for x in x_values]
+#创建图形
+plt.style.use('seaborn')
+fig, ax = plt.subplots()
+#ax.scatter(x_values, cubes, edgecolor='none', s=10)
+# 设置图表名称和坐标轴名称。
+ax.scatter(x_values, cubes, c=cubes, cmap=plt.cm.Greens, s=10)
+#cmap=plt.cm.Greens是调整颜色，这种颜色是渐变的。 c=cubes, cmap=plt.cm.Greens,是一起出现的
+ax.set_title("Cubes", fontsize=24)
+ax.set_xlabel('Value', fontsize=14)
+ax.set_ylabel('Cube of Value', fontsize=14)
+
+# 设置刻度标签的大小。
+ax.tick_params(axis='both', labelsize=14)#axis='both' 是默认值表示对两个轴都操作
+ax.axis([0, 5100, 0, 5100**3])
+plt.show()#现实图形
+##################################################################################################使用matplotlib作图系列。这里使用的ax坐标系来做的，使用plt其实也可以，但是指令有所差异。
