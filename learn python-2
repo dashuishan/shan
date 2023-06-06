@@ -1,0 +1,9 @@
+#chapter15
+import matplotlib.pyplot as plt
+x_values=[1,2,3,4,5]
+cubes=[1,8,27,64,125]
+#创建图形
+plt.style.use('seaborn')
+fig, ax = plt.subplots()
+"""这里fig和ax是两个subplots()的返回对象，名称当然可以自定义,fig 即figure画窗,ax即axex，画窗中的笛卡尔坐标系"""
+ax.scatter(x_values, cubes, edgecolor='none', s=40)
