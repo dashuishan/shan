@@ -1206,3 +1206,58 @@ def city_country(city, country,population=""):
   else:
     return f"{city.title()}, {country.title()}"
     ####这里的pupulation是可选的工参。初始为空，然后使用if else设置可选。
+    #######################################################################
+    import unittest
+from city_functions import city_country
+class CitiesTestCase(unittest.TestCase):
+    """测试 city_functions.py。"""
+
+    def test_city_country(self):
+        """传入简单的城市和国家可行吗？"""
+        santiago_chile = city_country('santiago', 'chile')
+        self.assertEqual(santiago_chile, 'Santiago, Chile')
+
+    def test_city_country_population(self):
+        """可选形参population也做相关的校验工作"""
+        santiago_chile = city_country('santiago', 'chile',population=500000)
+        self.assertEqual(santiago_chile, 'Santiago, Chile-population 500000')
+
+
+if __name__ == '__main__':
+ unittest.main()
+ ####################这是修改之后的测试用例，这里的两种方法都做了测试。我犯的错误还在于population这个参数 我上面加了引号。
+#mplyee.py代码
+class Employee:
+    """一个表示雇员的类"""
+    def __init__(self,first_name,last_name,salary):
+        """初始化雇员"""
+        self.first_name=first_name
+        self.last_name=last_name
+        self.salary=salary
+    def give_raise(self,add_salary=5000):
+        """给雇员加薪"""
+        self.salary+=add_salary
+# eric=Employee('shan','jiang',65_000)
+# eric.give_raise()
+# print(eric.salary)
+# test_employee.py代码
+import unittest
+from employee import Employee
+class TestEmployee(unittest.TestCase):
+    """测试模块emplyee"""
+    def setUp(self):
+        """创建一个Emplyee"""
+        self.eric=Employee('shan','jiang',65000)
+
+    def test_give_default_raise(self):
+        """测试使用默认的年薪增加是否能够成功"""
+        self.eric.give_raise()
+        self.assertEqual(self.eric.salary,70000)
+
+    def test_give_raise(self):
+        self.eric.give_raise(add_salary=6000)
+        self.assertEqual(self.eric.salary, 71000)
+###
+if __name__ == '__main__':
+    unittest.main()
+    ########################################
