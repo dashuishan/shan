@@ -1198,3 +1198,11 @@ if __name__ == '__main__':
  unittest.main()
 #####https://blog.csdn.net/weixin_45444133/article/details/119971985
 #####assertEqual(a,b)表示核实a == b 
+##################################################################################################
+def city_country(city, country,population=""):
+  """返回一个形如'Santiago, Chile'的字符串。"""
+  if population:
+    return f"{city.title()}, {country.title()}-population {population}"
+  else:
+    return f"{city.title()}, {country.title()}"
+    ####这里的pupulation是可选的工参。初始为空，然后使用if else设置可选。
