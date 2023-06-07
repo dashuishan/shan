@@ -36,3 +36,42 @@ ax.tick_params(axis='both', labelsize=14)#axis='both' 是默认值表示对两�
 ax.axis([0, 5100, 0, 5100**3])
 plt.show()#现实图形
 ##################################################################################################使用matplotlib作图系列。这里使用的ax坐标系来做的，使用plt其实也可以，但是指令有所差异。
+import matplotlib.pyplot as plt
+
+from random_walk import RandomWalk
+
+# Keep making new walks, as long as the program is active.
+while True:
+    # Make a random walk.
+    rw = RandomWalk(5000)
+    rw.fill_walk()
+
+    # Plot the points in the walk.
+    plt.style.use('classic')
+    fig, ax = plt.subplots(figsize=(15, 9))
+    #figsize=(15, 9)指的是一块画布，大小是（15，9）
+    #figure=plt.figure()可以解释为画布，画图第一件事就是创建一个画布figure，然后在这个画布上加各种元素。axes=fig.add_subplot(1,1,1),
+    # 把axes理解为你要放到画布上的各个物体。比如你要画一个太阳，一个房子，一个车在画布上，那么太阳是一个axes，房子是一个axes，etc。
+    #x.xaxis/ax.yaxis: 这才是你的xy坐标轴,每个坐标轴实际上也是由竖线和数字组成的，每一个竖线其实也是一个axis的subplot，因此ax.xaxis也存在axes这个对象。
+    # 对这个axes进行编辑就会修改xaxis图像上的表现。
+    point_numbers = range(rw.num_points)
+    #ax.scatter(rw.x_values, rw.y_values, c=point_numbers, cmap=plt.cm.Blues,
+       #edgecolors='none', s=1)
+    ax.plot(rw.x_values, rw.y_values, linewidth=1)
+    #linewidth：折线图的线的宽度，ax.plot()除了可以创建曲线图，还可以创建散点图，只需要提供点的样式即可，默认为实心圆。
+
+    # Emphasize the first and last points.
+    ax.scatter(0, 0, c='green', edgecolors='none', s=100)
+    ax.scatter(rw.x_values[-1], rw.y_values[-1], c='red', edgecolors='none',
+        s=100)
+
+    # Remove the axes.
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+    #这两句把x和y坐标给隐藏了。使图像变得更加整洁一些。
+    plt.show()
+
+    keep_running = input("Make another walk? (y/n): ")
+    if keep_running == 'n':
+        break
+      ########################################################这题使用了mattplotlib来画图，最大的感觉是axes可以画很多，plt也可以做相同的事情.使用scatter（）函数可以画图，使用ax.plot（）函数也可以画相同的图。
