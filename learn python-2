@@ -232,3 +232,61 @@ ax.set_ylabel("Temperature (F)", fontsize=16)
 ax.tick_params(axis='both', which='major', labelsize=16)
 plt.show()
 ###############################################################################这题是使用python去读CSV格式的数据，然后再画出来所需要的曲线图。
+import csv
+from datetime import datetime
+
+from matplotlib import pyplot as plt
+def get_weather_data(filename,  date_index, high_index,low_index):
+    """从数据文件中获取最高气温和最低气温。"""
+    with open(filename) as f:
+        reader = csv.reader(f)
+        header_row = next(reader) # 从文件中获取日期、最高气温和最低气温。
+        for row in reader:
+            current_date = datetime.strptime(row[date_index], '%Y-%m-%d')
+            try:
+                high = int(row[high_index])
+                low = int(row[low_index])
+            except ValueError:
+                print(f"Missing data for {current_date}")
+            else:
+                dates.append(current_date)
+                highs.append(high)
+                lows.append(low)
+filename = 'data/sitka_weather_2018_simple.csv'
+dates, highs, lows = [], [], []
+get_weather_data(filename,date_index=2,high_index=5,low_index=6)
+# 根据锡特卡的数据绘制图表。
+plt.style.use('seaborn')
+fig, ax = plt.subplots()
+ax.plot(dates, highs, c='red', alpha=0.6)
+ax.plot(dates, lows, c='blue', alpha=0.6)
+plt.fill_between(dates, highs, lows, facecolor='blue', alpha=0.15)
+# 获取死亡谷的数据。
+filename = 'data/death_valley_2018_simple.csv'
+dates, highs, lows = [], [], []
+get_weather_data(filename,date_index=2,high_index=4,low_index=5)
+# 将死亡谷的数据添加到当前图表中。
+ax.plot(dates, highs, c='red', alpha=0.3)
+ax.plot(dates, lows, c='blue', alpha=0.3)
+plt.fill_between(dates, highs, lows, facecolor='blue', alpha=0.05)
+# 设置图表的格式。
+title = "Daily high and low temperatures - 2018"
+title += "\nSitka, AK and Death Valley, CA"
+plt.title(title, fontsize=24)
+plt.xlabel('', fontsize=16)
+fig.autofmt_xdate()
+plt.ylabel("Temperature (F)", fontsize=16)
+plt.tick_params(axis='both', which='major', labelsize=16)
+plt.ylim(10, 130)
+plt.show()
+Traceback (most recent call last):
+错误代码
+  File "D:\writer&book\python蟒蛇书\源代码文件\源代码文件\chapter_16\the_csv_file_format\revisions_printing_4\death_valley_highs_lows.py", line 14, in <module>
+    current_date = datetime.strptime(row[2], '%Y-%m-%d')
+  File "D:\python\lib\_strptime.py", line 577, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+  File "D:\python\lib\_strptime.py", line 359, in _strptime
+    (data_string, format))
+ValueError: time data '2018/1/1' does not match format '%Y-%m-%d'
+
+Process finished with exit code 1
