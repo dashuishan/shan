@@ -196,3 +196,39 @@ offline.plot({'data': data, 'layout': my_layout}, filename='d8_d8.html')
 figure=Figure()
 #figure.show()
 ######################################################################这里使用[** for ** in range(1,**)]写出来 将那些循环的东西 瞬间简约了好多。太舒服的代码了。
+import csv
+from datetime import datetime
+
+from matplotlib import pyplot as plt
+
+filename = 'data/sitka_weather_2018_simple.csv'
+with open(filename) as f:
+    reader = csv.reader(f)
+#csv.reader()方法的作用相当于就是通过‘,’分割csv格式的数据，并将分割好的每行数据存入列表中，并且还去除了每行最后分割产生的数据尾部的空格、换行符、制表符等等
+#
+    header_row = next(reader)
+    #next(iter)显示下一个数据，括号里面是可迭代的序列。我觉得这里头取出来了 之后，后面的reader就编程没有头，只有纯数据的值了。(header_row)
+
+    # Get dates and high temperatures from this file.
+    dates, highs = [], []
+    for row in reader:#这时候使用循环才把具体的数据读出来。
+        current_date = datetime.strptime(row[2], '%Y-%m-%d')
+        dates.append(current_date)
+        high = int(row[5])
+        highs.append(high)
+        print(row)
+
+
+# Plot the high temperatures.
+plt.style.use('seaborn')
+fig, ax = plt.subplots()
+ax.plot(dates, highs, c='green')
+
+# Format plot.
+ax.set_title("Daily high temperatures - 2018", fontsize=24)
+ax.set_xlabel('', fontsize=16)
+fig.autofmt_xdate()
+ax.set_ylabel("Temperature (F)", fontsize=16)
+ax.tick_params(axis='both', which='major', labelsize=16)
+plt.show()
+###############################################################################这题是使用python去读CSV格式的数据，然后再画出来所需要的曲线图。
