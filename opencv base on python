@@ -1,0 +1,18 @@
+import cv2 as cv
+import sys
+if __name__=='__main__':
+    #读取图形并判断是否成功
+    img=cv.imread('./images/flower.jpg')
+    if img is None:
+        print('Failed to read flower.jpg.')
+    else:
+        print('图像的形状：{}\n元素数据类型:{}\n图像通道数:{}\n像素总数:{}'.format(img.shape,img.dtype,img.ndim,img.size))
+
+Process finished with exit code 0
+    #图像的形状：(442, 442, 3)
+    #元素数据类型:uint8
+    #图像通道数:3
+    #像素总数:586092
+    ##foamat函数的用法括号及其里面的字符 (称作格式化字段) 将会被 format() 中的参数替换
+    #print("我叫{},今年{}!".format("张三", 22))
+    #我叫张三, 今年22!
