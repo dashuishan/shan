@@ -77,3 +77,53 @@ if __name__ == '__main__':
     cv.destroyAllWindows()
 #. waitKey()–是在一个给定的时间内(单位ms)等待用户按键触发; 如果用户没有按下键,则继续等待 (循环)。常见 : 设置 waitKey(0) , 则表示程序会无限制的等待用户的按键事件，按任意键继续
 ####################################################################################################################################################
+import cv2 as cv
+import numpy as np
+import datetime
+import sys
+if __name__ == '__main__':
+    image = cv.imread('./images/flower.jpg')
+    # 判断图片是否读取成功
+    if image is None:
+        print('Failed to read flower.jpg.')
+        exit()
+
+    # 对比通道的分离
+    # 使用opencv中的cv.split()函数
+    begin1 = datetime.datetime.now()
+    for i in range(100000):
+        b1, g1, r1 = cv.split(image)
+    end1 = datetime.datetime.now()
+    print('通道分离(opencv)：{}s'.format((end1 - begin1).total_seconds()))
+    # 使用numpy中的切片和索引
+    begin2 = datetime.datetime.now()
+    for i in range(100000):
+        b2 = image[:, :, 0]
+        g2 = image[:, :, 1]
+        r2 = image[:, :, 2]
+    end2 = datetime.datetime.now()
+    print('通道分离(numpy)：{}s'.format((end2 - begin2).total_seconds()))
+
+    # 对比BGR图像转为RGB图像
+    # 使用opencv中cv.cvtColor()函数
+    begin3 = datetime.datetime.now()
+    for i in range(100000):
+        image_rgb = cv.cvtColor(image, cv.COLOR_BGR2RGB)
+    end3 = datetime.datetime.now()
+    print('BGR转RGB(opencv)：{}s'.format((end3 - begin3).total_seconds()))
+    # 使用numpy中的切片和索引
+    begin4 = datetime.datetime.now()
+    for i in range(100000):
+        image_rgb = image[:, :, ::-1]
+        #img[:,:,::-1]也就是我们任意不改变width维的方式，也不改变height维的方式，仅仅改变channel维的方式，并且是倒序排列，原本的bgr排列方式经过倒序就变成了rgb的通道排列方式。
+        #img = img[:, :, ::-1].transpose(2, 0, 1)，transpose输入顺序NxCxHxW,我们将图片从HxWxC改为CxHxW的形式。
+        #img[::-1, :, :]其实是对图片进行上下翻转， img[:,::-1,:]是对图像进行左右翻转
+    end4 = datetime.datetime.now()
+    print('BGR转RGB(numpy)：{}s'.format((end4 - begin4).total_seconds()))
+#首先需要明白一点，我们通过cv2读图片时，数据读取的通道顺序是bgr，并且是height， width， channel的排列方式。
+运行后结果为：
+通道分离(opencv)：8.014632s
+通道分离(numpy)：0.042004s
+BGR转RGB(opencv)：2.087166s
+BGR转RGB(numpy)：0.020182s
+######################################################这里使用numpy和opecv两种方法去对比，对图片进行处理的效率问题。
