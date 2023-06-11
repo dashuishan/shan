@@ -135,3 +135,34 @@ BGR转RGB(numpy)：0.020182s
 # print interval_time
 # print total_interval_time
 ######################################################这里使用numpy和opecv两种方法去对比，对图片进行处理的效率问题。
+import cv2 as cv
+if __name__ == '__main__':
+    video = cv.VideoCapture('./videos/road.mp4')
+    # 判断是否成功创建视频流
+    while video.isOpened():
+        ret, frame = video.read()#ret变量表示是否成功从vidio中读出图像，读出则为true，没读出为false。也用来判断是否视频是否到了末尾。
+        if ret is True:
+            cv.imshow('Video', frame)
+            # 设置视频播放速度
+            # 读者可以尝试将该值做更改，并观看视频播放速度的变化
+            cv.waitKey(int(1000 / video.get(cv.CAP_PROP_FPS)))
+            #，当imshow之后不跟waitkey时，相当于没有给imshow提供时间展示图像，所以只有一个空窗口一闪而过。添加了waitkey后，哪怕仅仅是cv2.waitkey(1),我们也能截取到一帧的图像。所以cv2.imshow后边是必须要跟cv2.waitkey的。
+            #imshow（）后面必接cv.waitkey()，以显示图像。必须必须接！！This function is the only method in HighGUI that can fetch and handle events,so it needs to be
+            # 按下q退出
+            if cv.waitKey(1) & 0xFF == ord('q'):
+            #0xFF是一个十六进制数，转换为二进制是11111111。waitKey返回值的范围为（0-255），刚好也是8个二进制位。那么我们将 cv2.waitKey(1) & 0xFF计算一下（不知怎么计算的可以百度位与运算）发现结果仍然是waitKey的返回值，那为何要多次一举呢？直接 cv2.waitKey(1) == ord('q')不就好了吗。
+            #实际上在linux上使用waitkey有时会出现waitkey返回值超过了（0-255）的范围的现象。通过cv2.waitKey(1) & 0xFF运算，当waitkey返回值正常时 cv2.waitKey(1) = cv2.waitKey(1000) & 0xFF,当返回值不正常时，cv2.waitKey(1000) & 0xFF的范围仍不超过（0-255），就避免了一些奇奇怪怪的BUG。
+            #ord('q')的意思是返回q的ascii码，
+                break
+        else:
+            break
+    # 输出相关信息
+    print('视频中图像的宽度为：{}'.format(video.get(cv.CAP_PROP_FRAME_WIDTH)))
+    print('视频中图像的高度为：{}'.format(video.get(cv.CAP_PROP_FRAME_HEIGHT)))
+    print('视频帧率为：{}'.format(video.get(cv.CAP_PROP_FPS)))
+    print('视频总帧数为：{}'.format(video.get(cv.CAP_PROP_FRAME_COUNT)))
+    #cv.VideoCapture提供了get(propID)函数来获取视频属性，如视频的像素大小、帧数和帧率。
+    # 释放并关闭窗口
+    video.release()
+    cv.destroyAllWindows()
+    ########################################################################################读取视频的方法。
