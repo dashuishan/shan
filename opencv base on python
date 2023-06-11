@@ -166,3 +166,29 @@ if __name__ == '__main__':
     video.release()
     cv.destroyAllWindows()
     ########################################################################################读取视频的方法。
+import cv2 as cv
+import sys
+import numpy as np
+import matplotlib.pyplot as plt
+if __name__ == '__main__':
+    # 读取图像并判断是否读取成功
+    img = cv.imread('./images/flower.jpg')
+    if img is None:
+        print('Failed to read flower.jpg.')
+        sys.exit()
+    else:
+        # 添加alpha通道（cv.merge()函数将在第三章做具体讲解）
+        zeros = np.ones(img.shape[:2], dtype=img.dtype) * 100
+        #img.shape[:2] 取彩色图片的长、宽,如果img.shape[:3] 则取彩色图片的长、宽、通道
+        print(zeros.shape)
+        result = cv.merge([img, zeros])
+        #print(result)结果为三维的数组
+        print('原图的通道数为：{}'.format(img.shape[2]))
+        print('处理后的通道数为：{}'.format(result.shape[2]))
+        #关于img.shape[0]、[1]、[2],img.shape[0]：图像的垂直尺寸（高度）,img.shape[1]：图像的水平尺寸（宽度）,img.shape[2]：图像的通道数
+        # 图像展示
+        plt.imshow(result)
+        plt.show()
+        # 图像保存
+        cv.imwrite('./results/flower_alpha.png', result)
+      #######################################################图像的alpha通道，作用是调节图像的透明度。
