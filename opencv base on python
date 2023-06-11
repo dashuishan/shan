@@ -126,4 +126,12 @@ if __name__ == '__main__':
 通道分离(numpy)：0.042004s
 BGR转RGB(opencv)：2.087166s
 BGR转RGB(numpy)：0.020182s
+# 在python中经常会用到计算两个时间差，两个日期类型进行相减可以获取到时间差。经常会使用seconds来获取，其实seconds获取的是仅仅是时间差的秒数，忽略微秒数，忽略天数。
+# total_seconds()是获取两个时间之间的总差
+# t1 = datetime.datetime.strptime("2017-9-06 10:30:00", "%Y-%m-%d %H:%M:%S")
+# t2 = datetime.datetime.strptime("2017-9-08 12:30:00", "%Y-%m-%d %H:%M:%S")
+# interval_time = (t2 - t1).seconds  # 输入的结果：7200
+# total_interval_time = (t2 - t1).total_seconds() # 输出结果是: 180000.0
+# print interval_time
+# print total_interval_time
 ######################################################这里使用numpy和opecv两种方法去对比，对图片进行处理的效率问题。
