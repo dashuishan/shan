@@ -17,7 +17,7 @@ Process finished with exit code 0
     #print("我叫{},今年{}!".format("张三", 22))
     #我叫张三, 今年22!
     ################################################################################################
-    import cv2 as cv
+import cv2 as cv
 import numpy as np
 import datetime
 import sys
@@ -191,4 +191,4 @@ if __name__ == '__main__':
         plt.show()
         # 图像保存
         cv.imwrite('./results/flower_alpha.png', result)
-      #######################################################图像的alpha通道，作用是调节图像的透明度。
+      #######################################################图像的alpha通道，作用是调节图像的透明度。这里我用plt.imshow（）函数显示的，图像融合的时候需要乘以100,如果使用imshow就没有这个问题了额。
