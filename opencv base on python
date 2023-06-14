@@ -271,3 +271,39 @@ if __name__ == '__main__':
     # 释放对象
     file1.release()
 ###############################################使用CV保存三种类型的文件，并读取他们，现在的文件类型只有字符串 实数 和矩阵类型的了。读取和存储都采用的file.getNode('x').real()来进行读写的。
+import cv2 as cv
+import sys
+import numpy as np
+
+
+if __name__ == '__main__':
+    # 读取图像并判断是否读取成功
+    img = cv.imread('./images/lena.jpg')
+    if img is None:
+        print('Failed to read lena.jpg.')
+        sys.exit()
+    else:
+
+        # 将图像进行颜色模型转换
+        image = img.astype('float32')#img.astype可以对数据类型进行转换
+        image *= 1.0 / 255
+        #数据类型float32的图像的像素范围为0~1,在将图像类型为unit8的图像转换成数据类型为float32的图像时，需要先将图像像素除于255以缩放到0~1范围内。
+        HSV = cv.cvtColor(image, cv.COLOR_BGR2HSV)
+        YUV = cv.cvtColor(image, cv.COLOR_BGR2YUV)
+        Lab = cv.cvtColor(image, cv.COLOR_BGR2Lab)
+        GRAY = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+
+        # 展示结果
+        cv.imshow('Origin Image', image)
+        cv.imshow('HSV Image', HSV)
+        cv.imshow('YUV Image', YUV)
+        cv.imshow('Lab Image', Lab)
+        # 由于计算出Lab结果会有负数值，不能通过cv.imshow()函数显示
+        # 因此我们可以使用cv.imwrite()函数保存下来进行查看
+        cv.imwrite('./results/Convert_color_Lab.jpg', Lab)
+        cv.imshow('GRAY Image', GRAY)
+        #这里适合用imshow来显示多个图像的时候，也是使用cv.waitKey()去做配合等待。
+        # 关闭窗口
+        cv.waitKey(0)
+        cv.destroyAllWindows()
+#####################################################这个是色彩空间的转换，但是我依然没有明白的问题是！、img.astype('float32')转换前为什么需要弄成float32的模式，2是为什么lab类型因为是负值无法读取，保存了就可以读取了吗》imread()有这么鄙视负值吗？
