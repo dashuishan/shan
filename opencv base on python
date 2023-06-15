@@ -306,4 +306,68 @@ if __name__ == '__main__':
         # 关闭窗口
         cv.waitKey(0)
         cv.destroyAllWindows()
-#####################################################这个是色彩空间的转换，但是我依然没有明白的问题是！、img.astype('float32')转换前为什么需要弄成float32的模式，2是为什么lab类型因为是负值无法读取，保存了就可以读取了吗》imread()有这么鄙视负值吗？
+#####################################################这个是色彩空间的转换，但是我依然没有明白的问题是！、img.astype('float32')转换前为什么需要弄成float32的模式，后面要除以255就会出现错误提示。两种不同类别不能互相操作。
+#################################################2是为什么lab类型因为是负值无法读取，保存了就可以读取了吗》imread()有这么鄙视负值吗？
+# -*- coding:utf-8 -*-
+import cv2 as cv
+import sys
+import numpy as np
+
+
+if __name__ == '__main__':
+    # 读取图像并判断是否读取成功
+    img = cv.imread('./images/lena.jpg')
+    if img is None:
+        print('Failed to read lena.jpg.')
+        sys.exit()
+
+    # 通道分离
+    b, g, r = cv.split(img)
+
+    # 创建一个和图像尺寸相同的全0矩阵
+    zeros = np.zeros(img.shape[:2], dtype='uint8')
+
+    # 将通道数目相同的图像矩阵合并
+    bg = cv.merge([b, g, zeros])
+    gr = cv.merge([zeros, g, r])
+    br = cv.merge([b, zeros, r])
+    # 将通道数目不相同的图像矩阵合并
+    bgr_6 = cv.merge([bg, r, zeros, zeros])
+
+    # 展示结果
+    cv.imshow('Blue', b)
+    cv.imshow('Green', g)
+    cv.imshow('Red', r)
+    cv.imshow('Blue_Green', bg)
+    cv.imshow('Green_Red', gr)
+    cv.imshow('Blue_Red', br)
+
+    # 关闭窗口
+    cv.waitKey(0)
+    cv.destroyAllWindows()#由于双通道矩阵不能通过 cvimshow0进行查看，因此3个通道的矩阵,回忆一下是使用numpy的方法如何实现通道的分离。
+b2 = image[:, :, 0] g2 = image[:, :, 1],r2 = image[:, :, 2]
+############################################################################################################
+import cv2 as cv
+import numpy as np
+
+
+if __name__ == '__main__':
+    # 新建矩阵array
+    array = np.array([1, 2, 3, 4, 5, 10, 6, 7, 8, 9, 10, 0])
+
+    # 将array调整为3*4的单通道图像
+    img1 = array.reshape(3, 4)
+    print(img1)
+    minval_1, maxval_1, minloc_1, maxloc_1 = cv.minMaxLoc(img1)
+    print('图像img1中最小值为：{}, 其位置为：{}' .format(minval_1, minloc_1))
+    print('图像img1中最大值为：{}, 其位置为：{}' .format(maxval_1, maxloc_1))
+
+    # 先将array调整为为3*2*2的多通道图像
+    img2 = array.reshape((3, 2, 2))
+    # 再利用-1的方法调整尺寸
+    print(img2)
+    img2_re = img2.reshape((1, -1))#将变化后的矩阵又变成了一维。这里用单括号也是可以的。主要是-1的应用是个什么鬼呢？
+    print(img2_re)
+    minval_2, maxval_2, minloc_2, maxloc_2 = cv.minMaxLoc(img2_re)
+    print('图像img2中最小值为：{}, 其位置为：{}'.format(minval_2, minloc_2))
+    print('图像img2中最大值为：{}, 其位置为：{}'.format(maxval_2, maxloc_2))
