@@ -484,3 +484,36 @@ if __name__ == '__main__':
     cv.destroyAllWindows()
 ##############################################################################这里一个很显然的问题是无论是CV.min() 还是CV.max()都是比较每个维度的值，举例说明img6 是[[[218 135  26]，img5 是[[[128 138 225]，max56 是[[[218 138 225]
 ############################然后需要做的是 仔细观察像素取最大的结果是什么样子的。有利于以后灵活开发工作。
+import cv2 as cv
+import numpy as np
+if __name__ == '__main__':
+    # 创建两个黑白图像
+    img1 = np.zeros((200, 200), dtype='uint8')
+    img2 = np.zeros((200, 200), dtype='uint8')
+    img1[50:150, 50:150] = 255
+    img2[100:200, 100:200] = 255
+    # 读取图像并判断是否读取成功
+    img = cv.imread('./images/lena.jpg')
+    if img is None:
+        print('Failed to read lena.jpg.')
+        sys.exit()
+
+    # 进行逻辑运算
+    Not = cv.bitwise_not(img1)
+    And = cv.bitwise_and(img1, img2)
+    Or = cv.bitwise_or(img1, img2)
+    Xor = cv.bitwise_xor(img1, img2)#异或如果两个位的值相同（同为 0 或同为 1），则结果位等于 0；否则结果位等于 1。
+    img_Not = cv.bitwise_not(img)
+
+    # 展示结果
+    cv.imshow('img1', img1)
+    cv.imshow('img2', img2)
+    cv.imshow('Not', Not)
+    cv.imshow('And', And)
+    cv.imshow('Or', Or)
+    cv.imshow('Xor', Xor)
+    cv.imshow('Origin', img)
+    cv.imshow('Img_Not', img_Not)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+#################################################这是二值化图像的逻辑运算
