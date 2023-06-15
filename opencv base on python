@@ -419,3 +419,68 @@ img2的矩阵为[[[ 1  2]
   [10  0]]]
 通道1的均值为（1+3+5+6+8+9+10）/6=5.5,通道2的均值为（2+4+10+7+9+0）/6=5.3333333这就对通道做了 充分的认识了。
 这段程序还需要注意的点是计算方差采用的是(mean_std_dev_img2[1][0]，这样是因为mean_std_dev_img[0]记录的是平均值。
+############################################################################################################################
+# -*- coding:utf-8 -*-
+import cv2 as cv
+import numpy as np
+
+
+if __name__ == '__main__':
+    # 新建矩阵a和b
+    a = np.array([1, 2, 3.3, 4, 5, 9, 5, 7, 8.2, 9, 10, 2])
+    b = np.array([1, 2.2, 3, 1, 3, 10, 6, 7, 8, 9.3, 10, 1])
+    img1 = np.reshape(a, (3, 4))
+    img2 = np.reshape(b, (3, 4))
+    img3 = np.reshape(a, (2, 3, 2))
+    img4 = np.reshape(b, (2, 3, 2))
+
+    # 对两个单通道图像矩阵进行比较运算
+    max12 = cv.max(img1, img2)
+    min12 = cv.min(img1, img2)
+    print(f"img1 是{img1}")
+    print(f"img2 是{img2}")
+    print(f"max12 是{max12}")
+    print(f"min12 是{min12}")
+
+
+    # 对两个多通道图像矩阵进行比较运算
+    max34 = cv.max(img3, img4)
+    min34 = cv.min(img3, img4)
+
+    # 对两张彩色图像进行比较运算
+    img5 = cv.imread('./images/lena.jpg')
+    img6 = cv.imread('./images/noobcv.jpg')
+    print(f"img5 是{img5}")
+    print(f"img6 是{img6}")
+    max56 = cv.max(img5, img6)
+    min56 = cv.min(img5, img6)
+    cv.imshow('conMax', max56)
+    cv.imshow('conMin', min56)
+    print(f"max56 是{max56}")
+    # 对两张灰度图像进行比较运算
+    img7 = cv.cvtColor(img5, cv.COLOR_BGR2GRAY)
+    img8 = cv.cvtColor(img6, cv.COLOR_BGR2GRAY)
+    max78 = cv.max(img7, img8)
+    min78 = cv.min(img7, img8)
+    cv.imshow('conMax_GRAY', max78)
+    cv.imshow('conMin_GRAY', min78)
+
+    # 与掩模进行比较运算
+    # 生成一个低通300*300的掩模矩阵
+    src = np.zeros((512, 512, 3), dtype='uint8')
+    src[100:400:, 100:400:] = 255
+    print(img5.shape)
+    min_img5_src = cv.min(img5, src)
+    cv.imshow('Min img5 src', min_img5_src)
+
+    # 生成一个显示红色通道的低通掩模矩阵
+    src1 = np.zeros((512, 512, 3), dtype='uint8')
+    src1[:, :, 2] = 255#r = image[:, :, 2]就是红色通道取值255。
+    min_img5_src1 = cv.min(img5, src1)
+    cv.imshow('Min img5 src1', min_img5_src1)
+
+    # 关闭窗口
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+##############################################################################这里一个很显然的问题是无论是CV.min() 还是CV.max()都是比较每个维度的值，举例说明img6 是[[[218 135  26]，img5 是[[[128 138 225]，max56 是[[[218 138 225]
+############################然后需要做的是 仔细观察像素取最大的结果是什么样子的。有利于以后灵活开发工作。
