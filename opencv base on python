@@ -657,3 +657,58 @@ B的(2, 2)
 V_C的(4, 2)#横向连接
 H_C的(2, 4)#纵向连接
 ##################################################################################
+import cv2 as cv
+import sys
+if __name__ == '__main__':
+    # 读取图像并判断是否读取成功
+    img = cv.imread('./images/lena.jpg', cv.IMREAD_GRAYSCALE)
+    if img is None:
+        print('Failed to read lena.jpg.')
+        sys.exit()
+    # 将图像缩小
+    small_img = cv.resize(img, (15, 15), fx=0, fy=0, interpolation=cv.INTER_AREA)
+    print(f"small_img的尺寸为{small_img.shape}")
+    #结果显示small_img的尺寸为(15, 15)
+    # 最近邻插值
+    big_img1 = cv.resize(small_img, (30, 30), fx=0, fy=0, interpolation=cv.INTER_NEAREST)
+    print(f"big_img1的尺寸为{big_img1.shape}")
+    #结果显示big_img1的尺寸为(30, 30)
+    # 双线性插值
+    big_img2 = cv.resize(small_img, (30, 30), fx=0, fy=0, interpolation=cv.INTER_LINEAR)
+    # 双三次插值
+    big_img3 = cv.resize(small_img, (30, 30), fx=0, fy=0, interpolation=cv.INTER_CUBIC)
+    # 展示结果
+    cv.imshow('img',img)
+    cv.namedWindow('small', cv.WINDOW_NORMAL)#cv.namedWindow(winname[, flags]),创建一个窗口,WINDOW_NORMAL：窗口尺寸可变,如果用imshow()直接去读则生成的窗口是不能更改的。
+    cv.imshow('small', small_img)
+    cv.namedWindow('big_img1', cv.WINDOW_NORMAL)
+    cv.imshow('big_img1', big_img1)
+    cv.namedWindow('big_img2', cv.WINDOW_NORMAL)
+    cv.imshow('big_img2', big_img2)
+    cv.namedWindow('big_img3', cv.WINDOW_NORMAL)
+    cv.imshow('big_img3', big_img3)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+##############################################################################cv.resize()的用法。
+import cv2 as cv
+import sys
+if __name__ == '__main__':
+    # 读取图像并判断是否读取成功
+    img = cv.imread('./images/lena.jpg')
+    if img is None:
+        print('Failed to read lena.jpg.')
+        sys.exit()
+    # 沿x轴对称
+    img_x = cv.flip(img, 0)
+    # 沿y轴对称
+    img_y = cv.flip(img, 1)
+    # 先x轴对称，再y轴对称
+    img_xy = cv.flip(img, -1)
+    # 展示结果
+    cv.imshow('img', img)
+    cv.imshow('img_x', img_x)
+    cv.imshow('img_y', img_y)
+    cv.imshow('img_xy', img_xy)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+########################################################图片反转的用法。
