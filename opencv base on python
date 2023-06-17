@@ -764,3 +764,40 @@ axes[2].imshow(img_affine2[:,:,::-1]), axes[2].set_title('img_affine2')
 axes[3].imshow(img_affine3[:,:,::-1]), axes[3].set_title('img_affine3')
 #这里的M矩阵需要仔细考虑，首先为什么是2*3的变换矩阵，[1,0],[0,1]是单位矩阵[100,200]是平移向量。
 ######################################################################################
+import cv2 as cv
+import numpy as np
+import sys
+
+
+if __name__ == '__main__':
+    # 读取图像并判断是否读取成功
+    img = cv.imread('./images/noobcvqr.png')
+    if img is None:
+        print('Failed to read noobcvqr.png.')
+        sys.exit()
+
+    h, w = img.shape[:2]
+    size = (w, h)
+    # 读取透视变换前四个角点坐标
+    points_path = './data/noobcvqr_points.txt'
+    with open(points_path, 'r') as f:
+        src_points = np.array([tx.split(' ') for tx in f.read().split('\n')], dtype='float32')#看这里列表的构建形式，是采用了[fo in]的方式。
+    #split()：拆分字符串。通过指定分隔符对字符串进行切片，并返回分割后的字符串列表（list）
+    #这里有两个split()，第一个是分开\n，第二个是分开" "以获得字符串，不然会提示字符串加上空格的形式无法识别的告警
+    print(src_points)
+    # 设置透视变换后四个角点坐标
+    max_pt = np.max(src_points)
+    dst_points = np.array([[0.0, 0.0], [max_pt, 0.0], [0.0, max_pt], [max_pt, max_pt]], dtype='float32')
+
+    print(dst_points)
+    # 计算透视变换矩阵
+    rotation = cv.getPerspectiveTransform(src_points, dst_points)
+    # 透视变换投影
+    img_warp = cv.warpPerspective(img, rotation, size)
+
+    # 展示结果
+    cv.imshow('Origin', img)
+    cv.imshow('img_warp', img_warp)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+###########################################################################################
