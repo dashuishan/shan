@@ -732,7 +732,7 @@ if __name__ == '__main__':
     img_warp0 = cv.warpAffine(img, rotation0, size)
 
     # 根据定义的三个点进行仿射变换
-    src_points = np.array([[0, 0], [0, h - 1], [w - 1, h - 1]], dtype='float32')
+    src_points = np.array([[0, 0], [0, h - 1], [w - 1, h - 1]], dtype='float32') ##生成原始图像上的三个点（左上角，右上角，左下角）
     dst_points = np.array([[w * 0.11, h * 0.2], [w * 0.15, h * 0.7], [w * 0.81, h * 0.85]], dtype='float32')
     rotation1 = cv.getAffineTransform(src_points, dst_points)
     img_warp1 = cv.warpAffine(img, rotation1, size)
@@ -746,4 +746,21 @@ if __name__ == '__main__':
     #说明：对于一张图像而言的坐标系，和我们平时的平面坐标系是有所不同的。我们平时水平方向向右是x轴的正方向，垂直向上是y轴的正方向。
     #但是对于图像而言，它里面的各个像素的位置坐标是：水平方向向右是x轴的正方向，垂直向下是y轴的正方向。因为一张图像的第一个像素[0,0]是这个图像的左上角的第一个像素点。
     #https://zhuanlan.zhihu.com/p/511560729 知乎上讲的挺不错。
+#################################################以下是知乎的增补，这个太重要了。
+# 在知乎中例5.5 自定义一个变换矩阵，实现图像的平移  
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+img = cv2.imread(r'C:\Users\25584\Desktop\lenacolor.png')
+M = np.float32([[1,0,100], [0,1,200]])    #定义变换矩阵，由于只是移动图像，图像大小没有改变，所以左上矩阵是单位矩阵，右边一列是x轴y轴的原点移动了100、200个像素点。
+img_affine1 = cv2.warpAffine(img, M, (img.shape[1], img.shape[0]))  #输出图像的大小和原图像大小一样
+img_affine2 = cv2.warpAffine(img, M, (800, 800))                    #输出图像变成800x800了。
+img_affine3 = cv2.warpAffine(img, M, (400, 400))                    #输出图像变成400x400了。
+
+fig, axes = plt.subplots(1,4, figsize=(12,5), dpi=100)
+axes[0].imshow(img[:,:,::-1]), axes[0].set_title('yuan tu ')
+axes[1].imshow(img_affine1[:,:,::-1]), axes[1].set_title('img_affine1')#imshow(img_affine1[:,:,::-1])便BRG模式为RGB
+axes[2].imshow(img_affine2[:,:,::-1]), axes[2].set_title('img_affine2')
+axes[3].imshow(img_affine3[:,:,::-1]), axes[3].set_title('img_affine3')
+#这里的M矩阵需要仔细考虑，首先为什么是2*3的变换矩阵，[1,0],[0,1]是单位矩阵[100,200]是平移向量。
 ######################################################################################
