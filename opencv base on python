@@ -935,7 +935,7 @@ def laplian_image(image):
     expand = cv.pyrUp(cv.pyrDown(gauss_images[3]), dstsize=gauss_images[3].shape[:2])
     lpls = cv.subtract(gauss_images[3], expand)
     cv.imshow('Laplacian_{}'.format(0), lpls)
-
+#对于我来说，为什么会这样写，laplacian_0需要写出来，因为并没有gauss[4]这个数据
 if __name__ == '__main__':
     # 读取图像并判断是否读取成功
     G0 = cv.imread('./images/lena.jpg')
