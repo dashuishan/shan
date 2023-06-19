@@ -947,3 +947,72 @@ if __name__ == '__main__':
     cv.waitKey(0)
     cv.destroyAllWindows()
 ###############################################注意这里是完整的程序了，不管是高斯金字塔还是拉普拉斯金字塔的第一个写出来，剩下的参与到循环中去。最终的laplacian看起来也没有觉得
+import cv2 as cv
+import numpy as np
+import sys
+
+def call_backl_brightness(x):
+    global value, img, img1
+    value = cv.getTrackbarPos('brightness', 'Brighter')#函数cvGetTrackbarPos返回指定trackbar的当前位置
+    img1 = np.uint8(np.clip((value / 100 * img), 0, 255))#numpy中的clip()函数用于将数组中的元素控制在一个给定的范围内，给定需要控制的范围的上下边界，clip函数将所有小于下边界的数值全部改为下边界， 将大于上边界的数值全部改为上边界。
+
+if __name__ == '__main__':
+    # 读取图像并判断是否读取成功
+    img = cv.imread('./images/lena.jpg')
+    img1 = img.copy()
+    if img is None:
+        print('Failed to read lena.jpg.')
+        sys.exit()
+    cv.namedWindow('Brighter')
+    # 设置滑动条的初始值为100
+    value = 100
+    # 创建滑动条
+    cv.createTrackbar('brightness', 'Brighter', value, 300, call_backl_brightness)#call_backl_brightness这里的作用是滑块在移动时调用的函数指针。
+
+    while True:
+        cv.imshow('Brighter', img1)
+        if cv.waitKey(1) == ord('q'):
+            break
+    cv.destroyAllWindows()
+#这里的cv.createTrackbar('brightness', 'Brighter'......)和cv.getTrackbarPos('brightness', 'Brighter')里面两个参数终都是图像名称和标签名称。通过这两个名称使他们对应起来。
+###################################我觉得这里的奇妙的是这里def call_backl_brightness(x)，里面有个X，后面貌似没有使用到，其实他是被调用了这个X，如果没有就会报错。
+def A(B):
+    B(32)
+def C(w):
+    print(w)
+A(C)
+是否这样理解A(C)-----C是B的实参 因此得到C(32)-----执行C（W）的函数，print(32)-----------结果显示32
+###########################################################################################################
+import cv2 as cv
+import sys
+def draw(event, x, y,flags,param):
+    global img, pre_pts
+
+    # 鼠标右键按下
+    if event == cv.EVENT_RBUTTONDOWN:
+        print('请点击鼠标左键进行轨迹的绘制。')
+
+    # 鼠标左键按下
+    if event == cv.EVENT_LBUTTONDOWN:
+        pre_pts = (x, y)
+        print('轨迹起始坐标为：{}, {}'.format(x, y))
+
+    # 鼠标移动
+    if event == cv.EVENT_MOUSEMOVE and flags == cv.EVENT_FLAG_LBUTTON:#cv.EVENT_MOUSEMOVE鼠标移动，cv.EVENT_FLAG_LBUTTON按住鼠标左键拖曳
+        pts = (x, y)
+        img = cv.line(img, pre_pts, pts, (0, 0, 255), 2, 5,0)倒数第一个是默认0，倒数第二个是线性。
+        pre_pts = pts
+        cv.imshow('image', img)
+if __name__ == '__main__':
+    # 读取图像并判断是否读取成功
+    img = cv.imread('./images/lena.jpg')
+    img1 = img.copy()
+    if img is None:
+        print('Failed to read lena.jpg.')
+        sys.exit()
+    pre_pts = -1, -1
+    cv.imshow('image', img1)
+    cv.setMouseCallback('image', draw)#本小结中的鼠标调用函数。
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+######################################################这里调用draw时候把draw()后面的括号都省了，里面的调用属于底层的调用。底层代码都被封装了，我在写draw()函数的时候，要求是这5个函数，连顺序都不变。
