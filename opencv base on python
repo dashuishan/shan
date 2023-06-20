@@ -1111,3 +1111,26 @@ if __name__ == '__main__':
     cv.waitKey(0)
     cv.destroyAllWindows()
 ###################################需要注意的是ravel()函数可以将图像多维数组拉成一维的，bins的作用bins取值整数时是是用来做X轴的多少等分。
+import cv2 as cv
+from matplotlib import pyplot as plt
+import sys
+
+
+if __name__ == '__main__':
+    # 读取图像
+    img = cv.imread('./images/flower.jpg')
+    # 判断图像是否读取成功
+    if img is None:
+        print('Failed to read flower.jpg.')
+        sys.exit()
+    # 绘制直方图并展示
+    color = ('b', 'g', 'r')
+    #color = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
+    for i, col in enumerate(color):
+        hist_item = cv.calcHist([img], [i], None, [256], [0, 256])#[i]形成图像索引
+        plt.plot(hist_item, color=col)
+    cv.imshow('image', img)
+    plt.show()
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+################################################试了不能使用color = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]，因为这里的plt.plot无法识别数字形式。
