@@ -1290,4 +1290,4 @@ if __name__ == '__main__':
 
     print('Compare_Hist_1.jpg与Compare_Hist_2.jpg的相似性为：%s' % (compare_hist(img1_path, img2_path)))
     print('Compare_Hist_3.jpg与Compare_Hist_4.jpg的相似性为：%s' % (compare_hist(img3_path, img4_path)))
-########################################################语言很简练，
+########################################################语言很简练，函数相互嵌套。
