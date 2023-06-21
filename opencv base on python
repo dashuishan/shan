@@ -601,7 +601,7 @@ if __name__ == '__main__':
     cv.imshow('out2', out2)
     cv.waitKey(0)
     cv.destroyAllWindows()
-##########################################################常用的cv.threshold（）只有一个阈值，如果需要多个阈值 我们就使用cv.LUT()的方式，目前来看这种方式不一定使用频繁。
+##########################################################常用的cv.threshold（）只有一个阈值，如果需要多个阈值 我们就使用cv.LUT()的方式，目前来看这种方式不一定使用频繁。后面如果在使用直方图的均衡时有大作用。
 import cv2 as cv
 import numpy as np
 import sys
@@ -1291,3 +1291,103 @@ if __name__ == '__main__':
     print('Compare_Hist_1.jpg与Compare_Hist_2.jpg的相似性为：%s' % (compare_hist(img1_path, img2_path)))
     print('Compare_Hist_3.jpg与Compare_Hist_4.jpg的相似性为：%s' % (compare_hist(img3_path, img4_path)))
 ########################################################语言很简练，函数相互嵌套。
+import cv2 as cv
+from matplotlib import pyplot as plt
+import sys
+
+if __name__ == '__main__':
+    # 读取图像
+    image = cv.imread('./images/equalizeHist.jpg', 0)
+    # 判断图片是否读取成功
+    if image is None:
+        print('Failed to read equalizeHist.jpg.')
+        sys.exit()
+    # 绘制原图直方图
+    plt.hist(image.ravel(), 256, [0, 256])
+    plt.title('Origin Image')
+    plt.show()
+    # 进行均衡化并绘制直方图
+    image_result = cv.equalizeHist(image)
+    plt.hist(image_result.ravel(), 256, [0, 256])
+    plt.title('Equalized Image')
+    plt.show()
+    # 展示均衡化前后的图片
+    cv.imshow('Origin Image', image)
+    cv.imshow('Equalized Image', image_result)
+
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+#############################################直方图均衡 可以增加灰度的分布，以增加图片的分辨效果。
+import cv2 as cv
+import numpy as np
+from matplotlib import pyplot as plt
+import sys
+
+if __name__ == '__main__':
+    # 读取图像
+    image1 = cv.imread('./images/Hist_Match.png')
+    image2 = cv.imread('./images/equalLena.png')
+    # 判断图片是否读取成功
+    if image1 is None or image2 is None:#看这里两张图片一起读的情况。
+        print('Failed to read Hist_Match.png or equalLena.png.')
+        sys.exit()
+
+    # 计算两张图像的直方图
+    hist_image1 = cv.calcHist([image1], [0], None, [256], [0, 256])
+    hist_image2 = cv.calcHist([image2], [0], None, [256], [0, 256])
+    # 对直方图进行归一化
+    hist_image1 = cv.normalize(hist_image1, None, norm_type=cv.NORM_L1)#直方图的归一化的原因，我需要认真记录一下，我们完成了对图像灰度值的统计工作，并成功绘制了图像的直方图。由于统计的灰度值数目与图像的尺寸具有直接关系，
+    """ 因此如果以灰度值数目作为最终统计结果，那么一张图像与它经过尺寸缩放后的图像的直方图将会有巨大的差异。直方图可以用来表示图像的明亮程度，从理论上讲，这两张图像将具有大致相似的直方图分布特性，因此用灰度值的数目作为统计结果具有
+    定的局限性。图像的灰度值统计的主要目的就是查看某个灰度值在所有像素中所占的比例,你可以用每个灰度值的像素数目占一幅图像中所有像素的比例来表示某个灰度值数目的多少,即将统计结果除以图像中的像素个数。这种方式可以保证每个灰度值的统计结果都是0%~100%的数据，
+     从而实现统计结果的归一化。但这种方式存在一个弊端，就是在数据类型为 uint8 的图像中，灰度值有256个等级，平均每个像素的灰度值所占比例为 0.39%，这个比例非常低。因此，为了更直观地绘制直方图,你需要将比例扩大一定的倍数。另一种常用的归一化方式是寻找统计结果中的最大数值，
+    把所有结果除以这个最大的数值，以将所有数据都归一化到0~1。"""
+    hist_image2 = cv.normalize(hist_image2, None, norm_type=cv.NORM_L1)
+
+    # 计算两张图像直方图的累计概率
+    hist1_cdf = np.zeros((256, ))
+   # print(hist1_cdf)
+    hist2_cdf = np.zeros((256, ))
+    hist1_cdf[0] = 0
+    hist2_cdf[0] = 0
+    for i in range(1, 256):
+        hist1_cdf[i] = hist1_cdf[i - 1] + hist_image1[i]
+        hist2_cdf[i] = hist2_cdf[i - 1] + hist_image2[i]
+
+    # 构建累计概率误差矩阵
+    diff_cdf = np.zeros((256, 256))
+    for k in range(256):
+        for j in range(256):
+            diff_cdf[k][j] = np.fabs((hist1_cdf[k] - hist2_cdf[j]))#构建误差矩阵的作用是为了映射。
+            #numpy.fabs ()函数用于逐元素计算绝对值。. 此函数以arr返回数据的绝对值 (正值)。. 它总是以浮点数返回绝对值。
+    print(diff_cdf.shape)#这是个（256，256）的list
+
+    # 生成LUT映射表
+    lut = np.zeros((256, ), dtype='uint8')
+    for m in range(256):
+        # 查找源灰度级为i的映射灰度和i的累计概率差值最小的规定化灰度
+        min_val = diff_cdf[m][0]
+        index = 0
+        for n in range(256):
+            if min_val > diff_cdf[m][n]:
+                min_val = diff_cdf[m][n]
+                index = n#找到最小的n值
+        lut[m] = index#把找到最小的n赋给了lut[0]，然后一次赋值。完成lut[m]的编写。
+    print(lut)
+    result = cv.LUT(image1, lut)
+
+    # 展示结果
+    cv.imshow('Origin Image1', image1)
+    cv.imshow('Origin Image2', image2)
+    cv.imshow('Result', result)
+    _, _, _ = plt.hist(x=image1.ravel(), bins=256, range=[0, 256])
+    plt.show()
+    _, _, _ = plt.hist(x=image2.ravel(), bins=256, range=[0, 256])
+    plt.show()
+    _, _, _ = plt.hist(x=result.ravel(), bins=256, range=[0, 256])
+    plt.show()
+
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+##########################################################怎么理解这里的 diff_cdf，他的shape（(256, 256)），又怎么理解这个LUT （256，）从左到右正好是递增的呢？
+##########################################################从左到右正好是递增的呢？这个问题 我可以理解了，因为就是累计概率，从左到右就是递增的关系。
+#######################################################关于（256，256）我觉得可以重写这个算法，以实现两个
