@@ -89,3 +89,41 @@ if __name__ == '__main__':
     cv.waitKey(0)
     cv.destroyAllWindows()
 ##################################################################椒盐噪声是黑的椒和白色的盐两种的组合。
+import cv2 as cv
+import numpy as np
+import sys
+
+
+def add_noise(image, mean=0, val=0.01):
+    size = image.shape
+    image = image / 255
+    gauss = np.random.normal(mean, val ** 0.5, size)#np.random.normal中的参数size为输出的维度。
+    noise = image + gauss
+    return gauss, noise
+
+
+if __name__ == '__main__':
+    # 读取图像并判断是否读取成功
+    img = cv.imread('./images/dolphins.jpg')
+    if img is None:
+        print('Failed to read dolphins.jpg.')
+        sys.exit()
+    # 灰度图像添加高斯噪声
+    gray_image = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    gray_gauss, gray_noisy_image = add_noise(gray_image)
+    print(gray_gauss)
+    # 彩色图像添加高斯噪声
+    color_gauss, color_noisy_image = add_noise(img)
+
+    # 展示结果
+    cv.imshow("Gray Image", gray_image)
+    cv.imshow("Gray Gauss Image", gray_gauss)
+    cv.imshow("Gray Noisy Image", gray_noisy_image)
+    cv.imshow("Color Image", img)
+    cv.imshow("Color Gauss Image", color_gauss)
+    cv.imshow("Color Noisy Image", color_noisy_image)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+#########################################################################1、np.random.normal()高斯分布可以输出多个维度的数据。2、定义函数的时候设置了初始的（mean和val)所以在后面的使用函数的过程中
+####就没有给出新的mean和val了。3、高斯噪声此处的平均值设置到0，但是图像像素的值在(0，255)，因此在程序中将图像归一化除以255，让高斯造成更加明显的体现出来。
+####################################################################
