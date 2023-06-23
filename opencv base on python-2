@@ -337,3 +337,36 @@ if __name__ == '__main__':
     cv.waitKey(0)
     cv.destroyAllWindows()
 ##################################################非线性的中值滤波对噪声具有更好的抑制作用，同时在一定的条件下，中值滤波对图像的边缘信息保护得更好，可以避免图像细节的模糊。但是如果KSIZE过大也会造成图像模糊问题。
+import cv2 as cv
+import sys
+
+
+if __name__ == '__main__':
+    # 读取图像face1.png和face2.png
+    image1 = cv.imread('./images/face1.png', cv.IMREAD_ANYCOLOR)
+    image2 = cv.imread('./images/face2.png', cv.IMREAD_ANYCOLOR)
+    if image1 is None or image2 is None:
+        print('Failed to read face1.png or face2.png.')
+        sys.exit()
+
+    # 验证不同滤波器直径的滤波效果
+    res1 = cv.bilateralFilter(image1, 9, 50, 25 / 2)
+    res2 = cv.bilateralFilter(image1, 25, 50, 25 / 2)
+
+    # 验证不同标准差值的滤波效果
+    res3 = cv.bilateralFilter(image2, 9, 9, 9)
+    res4 = cv.bilateralFilter(image2, 9, 200, 200)
+
+    # 展示结果
+    cv.imshow('Origin_image1', image1)
+    cv.imshow('Origin_image2', image2)
+    cv.imshow('Result1', res1)
+    cv.imshow('Result2', res2)
+    cv.imshow('Result3', res3)
+    cv.imshow('Result4', res4)
+
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+################################################################双边滤波是两个滤波器功能的叠加 分别是空间滤波器和值域滤波器图像像素灰度值相似性的滤波器。
+##############################cv.bilateralFilter(image2, 9, 200, 200)这里的9是滤波器的滤波器的大小，200，200分别是颜色空间滤波器的标准差，空间坐标中滤波器的标准差。
+#########################################双边滤波具有美颜的效果。
