@@ -218,3 +218,39 @@ if __name__ == '__main__':
     cv.destroyAllWindows()
 ####################################################分别使用CV.sqrBoxFilter()和CV.boxFilter()两个函数进行图像滤波，如果不归一化从结果看来图像很容易呈现曝光过度的现象，失去了很多细节。
 ####不明白这里的 img_32 /= 255.0,如果我不用的话，显示的图像也是差不多的效果。
+######################################################################################
+import cv2 as cv
+import sys
+
+
+if __name__ == '__main__':
+    # 读取图像并判断是否读取成功
+    img = cv.imread('./images/Gray_dolphins.jpg', cv.IMREAD_ANYDEPTH)
+    img_gauss = cv.imread('./images/GrayGaussImage.jpg', cv.IMREAD_ANYDEPTH)
+    img_salt = cv.imread('./images/GraySaltPepperImage.jpg', cv.IMREAD_ANYDEPTH)
+    if img is None or img_gauss is None or img_salt is None:
+        print('Failed to read Gray_dolphins.jpg or GrayGaussImage.jpg or GraySaltPepperImage.jpg.')
+        sys.exit()
+
+    # 分别对上述图像进行高斯滤波，后面的数字代表滤波器尺寸
+    result_5 = cv.GaussianBlur(img, (5, 5), 10, 20)
+    result_9 = cv.GaussianBlur(img, (9, 9), 10, 20)
+    result_5_gauss = cv.GaussianBlur(img_gauss, (5, 5), 10, 20)
+    result_9_gauss = cv.GaussianBlur(img_gauss, (9, 9), 10, 20)
+    result_5_salt = cv.GaussianBlur(img_salt, (5, 5), 10, 20)
+    result_9_salt = cv.GaussianBlur(img_salt, (9, 9), 10, 20)
+
+    # 展示结果
+    cv.imshow('Origin img', img)
+    cv.imshow('Result img 5*5', result_5)
+    cv.imshow('Result img 9*9', result_9)
+    cv.imshow('Origin img_gauss', img_gauss)
+    cv.imshow('Result img_gauss 5*5', result_5_gauss)
+    cv.imshow('Result img_gauss 9*9', result_9_gauss)
+    cv.imshow('Origin img_salt', img_salt)
+    cv.imshow('Result img_salt 5*5', result_5_salt)
+    cv.imshow('Result img_salt 9*9', result_9_salt)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+##################################################在均值滤波中可以看到其实是图像经过卷积得到的结果，这样的图像是变得更加模糊了，这就是神经卷积网络的基础。还有需要思考的问题是高频和低频
+##################只是相对物理滤波器而言，那么数字滤波器哪里来的高频和低频呢。另外高斯滤波依然会把图像变得更加模糊。
