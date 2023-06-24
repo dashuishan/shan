@@ -417,3 +417,62 @@ if __name__ == '__main__':
     cv.waitKey(0)
     cv.destroyAllWindows()
 #######################################################cv.convertScaleAbs()处理之后对矩阵中所有数据取绝对值。这样就把边缘处的轮廓求出来了。
+import cv2 as cv
+import sys
+
+
+if __name__ == '__main__':
+    # 读取图像equalLena.png
+    image = cv.imread('./images/equalLena.png', cv.IMREAD_ANYDEPTH)
+    if image is None:
+        print('Failed to read equalLena.png.')
+        sys.exit()
+
+    # X方向一阶边缘
+    result_X = cv.Sobel(image, cv.CV_16S, 1, 0, 3)
+    result_X = cv.convertScaleAbs(result_X)
+    # Y方向一阶边缘
+    result_Y = cv.Sobel(image, cv.CV_16S, 0, 1, 3)
+    result_Y = cv.convertScaleAbs(result_Y)
+    # 整幅图像的一阶边缘
+    result_XY = result_X + result_Y
+
+    # 显示结果
+    cv.imshow('Result_X', result_X)
+    cv.imshow('Result_Y', result_Y)
+    cv.imshow('Result_XY', result_XY)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+#######################################################这是sobel算子来得到图形边缘的方法，sobel讲滤波矩阵的ksize由(ksize,)变成了(ksize,ksize)类型。x方向一阶检测算子为
+[-1,0,1  y方向的一阶算子为[-1 -2 -1
+-2 0 2                    0 0  0
+-1 0 1]                   1 2  1]
+####这个sobel依然是先求x边缘 然后求y边缘，组后x+y。我这里使用了cv.Sobel(image, cv.CV_16S, 1, 1, 3)我想把x,y一起做矩阵变换，但是图片并没有呈现出很好的轮廓效果。
+###########################################################
+import cv2 as cv
+import sys
+
+
+if __name__ == '__main__':
+    # 读取图像equalLena.png
+    image = cv.imread('./images/equalLena.png', cv.IMREAD_ANYDEPTH)
+    if image is None:
+        print('Failed to read equalLena.png.')
+        sys.exit()
+
+    # X方向一阶边缘
+    result_X = cv.Scharr(image, cv.CV_16S, 1, 0)
+    result_X = cv.convertScaleAbs(result_X)
+    # Y方向一阶边缘
+    result_Y = cv.Scharr(image, cv.CV_16S, 0, 1)
+    result_Y = cv.convertScaleAbs(result_Y)
+    # 整幅图像的一阶边缘
+    result_XY = result_X + result_Y
+
+    # 显示结果
+    cv.imshow('Result_X', result_X)
+    cv.imshow('Result_Y', result_Y)
+    cv.imshow('Result_XY', result_XY)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+##########################################################################################cv.Scharr()是sobel算子中的升级性，提供了更多的图像细节。
