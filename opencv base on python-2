@@ -600,3 +600,53 @@ if __name__ == '__main__':
     cv.waitKey(0)
     cv.destroyAllWindows()
 ####################################################这里的cv.distanceTransform()的距离变换并没有改变图像的显示。CV_32F倒是显示出来和以前一摸一样的图像。
+import cv2 as cv
+import numpy as np
+import sys
+
+
+def generate_random_color():
+    """输出不同的颜色"""
+    return np.random.randint(0, 256, 3)
+
+
+def fill_color(img1, n, img2):
+    h, w = img1.shape
+    res = np.zeros((h, w, 3), img1.dtype)
+    # 生成随机颜色
+    random_color = {}
+    for c in range(1, n):
+        random_color[c] = generate_random_color()
+    # 为不同的连通域填色
+    for i in range(h):
+        for j in range(w):
+            item = img2[i][j]
+            if item == 0:#0表示黑色的。
+                pass
+            else:
+                print(item)
+                res[i, j, :] = random_color[item]
+    return res
+
+if __name__ == '__main__':
+    # 对图像进行读取，并转换为灰度图像
+    rice = cv.imread('./images/rice.png', cv.IMREAD_GRAYSCALE)
+    if rice is None:
+        print('Failed to read rice.png.')
+        sys.exit()
+
+    # 将图像转成二值图像
+    rice_BW = cv.threshold(rice, 50, 255, cv.THRESH_BINARY)
+    # 统计连通域
+    count, dst = cv.connectedComponents(rice_BW[1], ltype=cv.CV_16U)#count是指返回的统计连通域的数量，这里得出的值是27，但在fill_color（)函数种，生成随机颜色时range的范围是从1开始的。
+    print(dst)
+    # 以不同颜色标记出不同的连通域
+    result = fill_color(rice, count, dst)
+
+    # 展示结果
+    cv.imshow('Origin', rice)
+    cv.imshow('Result', result)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+##########################################################################使用cv.connectedComponents（）返回两个参数 count, dst,这两个参数一个是连通的个数，另外一个连通的区域img[i,j]都赋值为连通区的数值 25，26....之类的值了。
+##################
