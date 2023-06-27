@@ -1167,3 +1167,46 @@ if __name__ == '__main__':
     print('直线上一点的坐标为：({}，{})'.format(x, y))
     print('拟合直线解析式为：y = {} (x - {}) + {}'.format(k, x, y))
 #############################################################################这里请注意line是一个[4,1]的list，如果取数的情况需要实用line[0][0]的操作取值，如果使用line[0]取出来的则是[0.999]的list.
+import cv2 as cv
+import sys
+
+
+def draw_circle(img, values):
+    for i in values[0, :]:
+        cv.circle(img, (i[0], i[1]), i[2], (255, 0, 0), 2)
+        cv.circle(img, (i[0], i[1]), 2, (0, 255, 0), 3)
+
+
+if __name__ == '__main__':
+    # 读取图像circles.png
+    image = cv.imread('./images/circles.png')
+    if image is None:
+        print('Failed to read circles.png.')
+        sys.exit()
+    cv.imshow('Origin', image)
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+
+    # 高斯滤波
+    gray = cv.GaussianBlur(gray, (9, 9), sigmaX=2, sigmaY=2)
+
+    # 设置参数
+    dp = 2                                  # 离散化累加器分辨率与图像分辨率的反比
+    min_dist = 20                           # 两个圆心之间的最小距离
+    param1 = 100                            # Canny边缘检测的较大阈值
+    param2 = 100                            # 累加器阈值
+    min_radius = 20                         # 圆形半径的最小值
+    max_radius = 100                        # 圆形半径的最大值
+
+    # 检测圆形
+    circles = cv.HoughCircles(gray, cv.HOUGH_GRADIENT, dp, min_dist,
+                              param1=param1, param2=param2, minRadius=min_radius, maxRadius=max_radius)
+#circles存放维度为1*n*3的ndarray对象中，N表示检测出N个原型。对于每个结果，前两个数据分别是圆心的横、纵坐标，第3个数据是圆的半径
+    # 绘制圆形
+    draw_circle(image, circles)
+
+    # 展示结果
+    cv.imshow('Detect Circle Result', image)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+values=[[[193.,183., 39.2],  [305., 119., 29.6],  [187.,253.  , 29.4],  [257.  ,235. ,  38.8],  [217. , 105.  , 40.8],  [323. , 259. ,  29.8],  [325.,  189.,   39. ],  [141. , 115.   ,34.6]]]
+#####################################################################################################
