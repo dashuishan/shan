@@ -1014,3 +1014,104 @@ if __name__ == '__main__':
 ##############
 #######################################################
 #cv.HoughLines()使用阈值200得到的直线多于使用300得到的直线。
+import cv2 as cv
+import numpy as np
+import sys
+
+def draw_line(img, lines):
+    img_copy = img.copy()
+    for i in range(0, len(lines)):
+        rho, theta = lines[i][0][0], lines[i][0][1]#这里返回值是极化坐标中的r和theta。
+        a = np.cos(theta)
+        b = np.sin(theta)
+        x0 = a * rho
+        y0 = b * rho
+        x1 = int(x0 + 1000 * (-b))
+        y1 = int(y0 + 1000 * a)
+        x2 = int(x0 - 1000 * (-b))
+        y2 = int(y0 - 1000 * a)#x1,y1,x2,y2是和x0,y0 公式为(y1-y0)/(x1-x0)=cos(theta)/sin(theta).这里使用了1000,其实换成500 /800也是可以的。
+        cv.line(img_copy, (x1, y1), (x2, y2), (255, 255, 255), 2)
+    return img_copy
+#详见https://blog.csdn.net/yl_best/article/details/88744997
+if __name__ == '__main__':
+    # 读取图像HoughLines.jpg
+    image = cv.imread('./images/HoughLines.jpg')
+    if image is None:
+        print('Failed to read HoughLines.jpg.')
+        sys.exit()
+    cv.imshow('Origin', image)
+
+    # 检测图像边缘
+    image_edge = cv.Canny(image, 50, 150, 3)#直接使用canny（）没有二值化吗？
+    cv.imshow('Image Edge', image_edge)
+
+    # 分别设定不同累加器阈值进行直线检测，并显示结果
+    threshold_1 = 200
+    lines_1 = cv.HoughLines(image_edge, 1, np.pi / 180, threshold_1)
+    try:
+        img1 = draw_line(image, lines_1)
+        cv.imshow('Image HoughLines({})'.format(threshold_1), img1)
+    except TypeError:
+        print('累加器阈值设为 {} 时，不能检测出直线.'.format(threshold_1))
+
+    threshold_2 = 300
+    lines_2 = cv.HoughLines(image_edge, 1, np.pi / 180, threshold_2)
+    try:
+        img2 = draw_line(image, lines_2)
+        cv.imshow('Image HoughLines({})'.format(threshold_2), img2)
+    except TypeError:
+        print('累加器阈值设为 {} 时，不能检测出直线.'.format(threshold_2))
+
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+#########################################################看看看，这里专门定义了画直线的函数def draw_line(img, lines)
+import cv2 as cv
+import numpy as np
+import sys
+
+
+def draw_line(img, lines):
+    img_copy = img.copy()
+    for i in range(0, len(lines)):
+        for x1, y1, x2, y2 in lines[i]:
+            cv.line(img_copy, (x1, y1), (x2, y2), (255, 255, 255), 2)
+    print(img_copy)
+    return img_copy
+
+
+if __name__ == '__main__':
+    # 读取图像HoughLines.jpg
+    image = cv.imread('./images/HoughLines.jpg')
+    if image is None:
+        print('Failed to read HoughLines.jpg.')
+        sys.exit()
+    cv.imshow('Origin', image)
+
+    # 检测图像边缘
+    image_edge = cv.Canny(image, 80, 180, 3)
+    cv.imshow('Image Edge', image_edge)
+
+    # 设置直线的最小长度
+    min_line_length = 200#线段的最短长度，当检测线段的长度小于该数值时，将会被剔除。
+
+    # 分别设定不同直线最大连接距离进行直线检测，并显示结果
+    max_line_gap_1 = 5#
+    lines_1 = cv.HoughLinesP(image_edge, 1, np.pi / 180, 150, minLineLength=min_line_length, maxLineGap=max_line_gap_1)
+
+    img1 = draw_line(image, lines_1)
+    # try:
+    cv.imshow('Image HoughLinesP ({})'.format(max_line_gap_1), img1)
+    # except TypeError:
+    #     print('最大连接距离设为 {} 时，不能检测出直线.'.format(max_line_gap_1))
+    print(lines_1)
+    max_line_gap_2 = 20
+    lines_2 = cv.HoughLinesP(image_edge, 1, np.pi / 180, 150, minLineLength=min_line_length, maxLineGap=max_line_gap_2)
+    try:
+        img2 = draw_line(image, lines_2)#不需要专门的设置画图函数了，更加简约。
+        cv.imshow('Image HoughLinesP ({})'.format(max_line_gap_2), img2)
+    except TypeError:
+        print('最大连接距离设为 {} 时，不能检测出直线.'.format(max_line_gap_2))
+
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+######################################################################################
