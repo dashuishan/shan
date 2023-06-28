@@ -1321,4 +1321,44 @@ if __name__ == '__main__':
         img_area = cv.contourArea(contours[i])#这里轮廓面积其实说的是像素点
         print('第{}个轮廓面积为：{}'.format(i, img_area))
 ########################################################################cv.contourArea()是指像素面积。单位就是像素点。
+import cv2 as cv
+import sys
+import numpy as np
 
+
+if __name__ == '__main__':
+    # 读取图像stuff.jpg
+    image = cv.imread('./images/stuff.jpg')
+    if image is None:
+        print('Failed to read stuff.jpg.')
+        sys.exit()
+    cv.imshow('Origin', image)
+
+    # 提取图像边缘
+    canny = cv.Canny(image, 80, 160, 3)
+    cv.imshow('Canny Image', canny)
+
+    # 膨胀运算
+    kernel = cv.getStructuringElement(0, (3, 3))
+    canny = cv.dilate(canny, kernel=kernel)
+
+    # 轮廓检测及绘制
+    contours, hierarchy = cv.findContours(canny, mode=0, method=2)
+
+    # 寻找并绘制轮廓外接矩形
+    img1 = image.copy()
+    img2 = image.copy()
+    for i in range(len(contours)):#这个循环的意思是将所有的轮廓都显示出来，都画出来。
+        # 绘制轮廓的最大外接矩形
+        max_rect = cv.boundingRect(contours[i])
+        cv.rectangle(img1, max_rect, (0, 0, 255), 2, 8, 0)#使用CV。boundingRect()读出来的刚好是左上角横纵坐标，宽和高，所以都是直接用的
+        # 绘制轮廓的最小外接矩形
+        min_rect = cv.minAreaRect(contours[i])#最小外界矩形三部曲，step1 使用cv.minAreaRect()得到一个tuple组，中间包含矩阵，但是呢相对最大矩阵多了旋转角度这个选项
+        points = cv.boxPoints(min_rect).astype(np.int64)#step2 使用cv.boxPoints()就是用来返回4个顶角信息的参数。
+        img2 = cv.drawContours(img2, [points], -1, (0, 255, 0), 2, 8)#step3 使用cv.drawContours()画最小矩形。
+
+    cv.imshow('Max Rect', img1)
+    cv.imshow('Min Rect', img2)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+############################################################这一个函数很重要，主要是使用矩形画外接最小矩形和最大矩形，在我的项目天馈采集中得到了很好的应用。
