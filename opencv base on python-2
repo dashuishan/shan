@@ -1251,4 +1251,38 @@ if __name__ == '__main__':
     cv.destroyAllWindows()
 ###############圆的检测cv.HoghCircles()该函数会调用Camy边缘检测算法进行边缘检测’因此在检测圆形时不需要对灰度图像进行二值化’直接输入灰度图像即可°
 ######
+import cv2 as cv
+import sys
+
+
+if __name__ == '__main__':
+    # 读取图像circles.png
+    image = cv.imread('./images/circles.png')
+    if image is None:
+        print('Failed to read circles.png.')
+        sys.exit()
+    cv.imshow('Origin', image)
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+
+    # 高斯滤波
+    gray = cv.GaussianBlur(gray, (9, 9), sigmaX=2, sigmaY=2)#为什么需要高斯滤波呢？
+
+    # 二值化
+    _, binary = cv.threshold(gray, 75, 180, cv.THRESH_BINARY)
+
+    # 轮廓检测
+    contours, hierarchy = cv.findContours(binary, mode=cv.RETR_TREE, method=cv.CHAIN_APPROX_SIMPLE)
+
+    # 轮廓绘制
+    image = cv.drawContours(image, contours, -1, (0, 0, 255), 2, 8)
+
+    # 输出轮廓结构关系
+    print(hierarchy)
+
+    # 展示结果
+    cv.imshow('Find and Draw Contours', image)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+#################################################轮廓检测cv.findContours(）的作用是找到轮廓，然后使用cv.drawContours()将轮廓绘制出来。这个参数中需要预处理，就是需要二值化来处理。我看到先使用了高斯滤波。最后得到的东西
+###是一个矩阵。这个矩阵是一个表示各种轮廓位置关系的矩阵。
 
