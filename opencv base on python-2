@@ -1362,3 +1362,57 @@ if __name__ == '__main__':
     cv.waitKey(0)
     cv.destroyAllWindows()
 ############################################################这一个函数很重要，主要是使用矩形画外接最小矩形和最大矩形，在我的项目天馈采集中得到了很好的应用。
+import cv2 as cv
+import sys
+import numpy as np
+
+
+def judge_shape(val):
+    if val == 3:
+        return 'Triangle'
+    elif val == 4:
+        return 'Rectangle'
+    else:
+        return 'Ploygon-{}'.format(val)
+
+
+if __name__ == '__main__':
+    # 读取图像approx.png
+    image = cv.imread('./images/approx.png')
+    if image is None:
+        print('Failed to read approx.png.')
+        sys.exit()
+
+    # 提取图像边缘
+    canny = cv.Canny(image, 80, 160, 3)
+
+    # 膨胀运算
+    kernel = cv.getStructuringElement(0, (3, 3))
+    canny = cv.dilate(canny, kernel=kernel)
+
+    # 轮廓检测及绘制
+    contours, hierarchy = cv.findContours(canny, mode=0, method=2)
+
+    for i in range(len(contours)):
+        # 多边形拟合
+        approx = cv.approxPolyDP(contours[i], 4, closed=True)
+        print(approx.shape)
+        print(sum(approx))
+        print(len(approx))
+        # 多边形绘制
+        image = cv.drawContours(image, [approx], -1, (0, 255, 0), 2, 8)#这个cv.drawContours（）用途真的是超级广泛
+        # 在图中输出多边形形状
+        # 计算并绘制多边形形状中心
+        center = np.int0((sum(approx)[0] / len(approx)))#numpy.int0方法是将输入数组中的元素舍入为最接近的整数，然后强制转换为int类型。
+        # 如果输入数组的类型为float，int0方法将其转换为等效的int类型，
+        # 而不是执行四舍五入。对于其他输入类型，int0将其转换为等效的int类型。
+        #arr = np.array([1.5, 2.4, 3.8])
+       #print(np.int0(arr)) # 输出: [1 2 3]
+        center = (center[0], center[1])
+        cv.circle(image, center, 3, (0, 0, 255), -1)
+        # 判断并绘制形状信息
+        cv.putText(image, text=judge_shape(approx.shape[0]), org=center, fontFace=1, fontScale=1, color=(0, 0, 255))
+    cv.imshow('ApproxPolyDP', image)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+##################################待补充
