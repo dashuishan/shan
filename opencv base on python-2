@@ -1249,3 +1249,5 @@ if __name__ == '__main__':
     cv.imshow('Detect Circle Result', image)
     cv.waitKey(0)
     cv.destroyAllWindows()
+###############该函数会调用Camy边缘检测算法进行边缘检测’因此在检测圆形时不需要对灰
+度图像进行二值化’直接输入灰度图像即可°
