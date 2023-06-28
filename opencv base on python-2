@@ -1274,7 +1274,7 @@ if __name__ == '__main__':
     contours, hierarchy = cv.findContours(binary, mode=cv.RETR_TREE, method=cv.CHAIN_APPROX_SIMPLE)
 
     # 轮廓绘制
-    image = cv.drawContours(image, contours, -1, (0, 0, 255), 2, 8)
+    image = cv.drawContours(image, contours, -1, (0, 0, 255), 2, 8)#-1表示画出所有的轮廓出来。
 
     # 输出轮廓结构关系
     print(hierarchy)
@@ -1285,4 +1285,39 @@ if __name__ == '__main__':
     cv.destroyAllWindows()
 #################################################轮廓检测cv.findContours(）的作用是找到轮廓，然后使用cv.drawContours()将轮廓绘制出来。这个参数中需要预处理，就是需要二值化来处理。我看到先使用了高斯滤波。最后得到的东西
 ###是一个矩阵。这个矩阵是一个表示各种轮廓位置关系的矩阵。
+import cv2 as cv
+import sys
+import numpy as np
 
+if __name__ == '__main__':
+    # 用四个点表示三角形轮廓
+    A = (0, 0)              # 顶点A
+    B = (10, 0)             # 顶点B
+    C = (10, 10)            # 顶点C
+    D = (5, 5)              # 斜边中点D
+    triangle = np.array((A, B, C, D))
+    triangle_area = cv.contourArea(triangle)
+    print('三角形面积为：{}'.format(triangle_area))
+
+    # 读取图像circles.png
+    image = cv.imread('./images/circles.png')
+    if image is None:
+        print('Failed to read circles.png.')
+        sys.exit()
+
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+
+    # 高斯滤波
+    gray = cv.GaussianBlur(gray, (9, 9), sigmaX=2, sigmaY=2)
+
+    # 二值化
+    binary = cv.threshold(gray, 75, 180, cv.THRESH_BINARY)#注意这里的binary 除了这种写法还有就是_,binary
+
+    # 轮廓检测
+    contours, hierarchy = cv.findContours(binary[1], mode=cv.RETR_TREE, method=cv.CHAIN_APPROX_SIMPLE)#contours是描述轮廓的坐标
+
+    # 输出轮廓面积
+    for i in range(len(contours)):
+        img_area = cv.contourArea(contours[i])#这里轮廓面积其实说的是像素点
+        print('第{}个轮廓面积为：{}'.format(i, img_area))
+########################################################################
