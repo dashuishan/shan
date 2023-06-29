@@ -1413,4 +1413,4 @@ if __name__ == '__main__':
     cv.imshow('ApproxPolyDP', image)
     cv.waitKey(0)
     cv.destroyAllWindows()
-##################################cv.approxPolyDP()最大的意义我觉得是使用sum(aprox)/len来
+##################################cv.approxPolyDP()最大的意义我觉得是使用sum(aprox)/len来定位这些多边形的中心位置。 还有就是这里使用了膨胀操作，膨胀具有加粗的效果。有没有这个操作对最终的结果影响比较大。
