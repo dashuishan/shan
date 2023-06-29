@@ -1414,3 +1414,40 @@ if __name__ == '__main__':
     cv.waitKey(0)
     cv.destroyAllWindows()
 ##################################cv.approxPolyDP()最大的意义我觉得是使用sum(aprox)/len来定位这些多边形的中心位置。 还有就是这里使用了膨胀操作，膨胀具有加粗的效果。有没有这个操作对最终的结果影响比较大。
+import cv2 as cv
+import sys
+if __name__ == '__main__':
+    # 读取图像approx.png
+    image = cv.imread('./images/approx.png')
+    if image is None:
+        print('Failed to read approx.png.')
+        sys.exit()
+
+    # 提取图像边缘
+    canny = cv.Canny(image, 80, 160, 3)
+
+    # 膨胀运算
+    kernel = cv.getStructuringElement(0, (3, 3))
+    canny = cv.dilate(canny, kernel=kernel)
+
+    # 轮廓检测及绘制
+    contours, hierarchy = cv.findContours(canny, mode=0, method=2)
+
+    # 创建图像中的一个点A
+    point = (300, 100)
+
+    # 判断点A距离各个轮廓的距离
+    for i in range(len(contours)):
+        dis = cv.pointPolygonTest(contours[i], point, measureDist=True)#若第3个参数
+        # 是False表示输出结果不具有方问性只判断像素与轮廓之间的位置关系如果像素在轮廓的内部返回值为1;如果像素在轮廓的边缘上返回
+        # 值为0;如果像素在轮廓的外部返回值为-1
+        if dis > 0:
+            pos = '内部'
+        elif dis == 0:
+            pos = '边缘上'
+        else:
+            pos = '外部'
+        print('像素点A（300, 100）距离第{}个轮廓的距离为：{}，'
+              '其位置位于轮廓{}'.format(i, round(dis, 2), pos))
+#######################################################################点到轮廓的距离对于计算轮廓在图像中的位置、两个轮廓之间的距离以及确定图像上某点
+是否在轮廓内部具有重要的作用。使用cv.cv.pointPolygonTest()函数。
