@@ -1374,8 +1374,6 @@ def judge_shape(val):
         return 'Rectangle'
     else:
         return 'Ploygon-{}'.format(val)
-
-
 if __name__ == '__main__':
     # 读取图像approx.png
     image = cv.imread('./images/approx.png')
@@ -1396,9 +1394,9 @@ if __name__ == '__main__':
     for i in range(len(contours)):
         # 多边形拟合
         approx = cv.approxPolyDP(contours[i], 4, closed=True)
-        print(approx.shape)
-        print(sum(approx))
-        print(len(approx))
+        print(f'sum的值是{sum(approx)}')
+        print(f'approx的值是{approx}')
+        print(f'approx的长度为{len(approx)}')#这里最
         # 多边形绘制
         image = cv.drawContours(image, [approx], -1, (0, 255, 0), 2, 8)#这个cv.drawContours（）用途真的是超级广泛
         # 在图中输出多边形形状
@@ -1415,4 +1413,4 @@ if __name__ == '__main__':
     cv.imshow('ApproxPolyDP', image)
     cv.waitKey(0)
     cv.destroyAllWindows()
-##################################待补充
+##################################cv.approxPolyDP()最大的意义我觉得是使用sum(aprox)/len来
