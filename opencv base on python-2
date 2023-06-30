@@ -1530,3 +1530,34 @@ if __name__ == '__main__':
 #只能看出来矩是矩类似于力矩概念。而且矩是用轮廓的基础上取出来的。
 #注意下质心的定义 分母m00表示的是所有像素值累加，一阶分别表示x和y乘以对应的值。所以质心的概念可以推测得出。
 #########################################################################################################
+import cv2 as cv
+import sys
+
+
+if __name__ == '__main__':
+    # 读取图像approx.png
+    image = cv.imread('./images/approx.png')
+    if image is None:
+        print('Failed to read approx.png.')
+        sys.exit()
+
+    # 灰度化
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+
+    # 二值化
+    _, binary = cv.threshold(gray, 105, 255, cv.THRESH_BINARY)
+
+    # 对图像进行开运算
+    kernel = cv.getStructuringElement(cv.MORPH_RECT, (9, 9), (-1, -1))
+    binary = cv.morphologyEx(binary, cv.MORPH_OPEN, kernel)
+
+    # 轮廓检测
+    contours, hierarchy = cv.findContours(binary, mode=cv.RETR_TREE, method=cv.CHAIN_APPROX_SIMPLE)
+
+    # 计算图像矩
+    for i in contours:
+        M = cv.moments(i)
+        # Hu距计算
+        hu = cv.HuMoments(M)
+        print(hu)
+        #Hu矩 是由二阶和三阶中心矩得到的7个不变矩、Hu具有更加广泛用途
