@@ -1799,3 +1799,56 @@ if __name__ == '__main__':
     cv.waitKey(0)
     cv.destroyAllWindows()
 ########################################这个最主要讲的是使用cv.cv.mulSpectrums（）两个卷积相乘，我怎么感觉不太实用，乘完后图像更加模糊。
+import cv2 as cv
+import numpy as np
+import sys
+np.set_printoptions(suppress=True)
+
+
+if __name__ == '__main__':
+    # 对矩阵进行处理
+    a = np.array([[1, 2, 3, 4, 5],
+                  [2, 3, 4, 5, 6],
+                  [3, 4, 5, 6, 7],
+                  [4, 5, 6, 7, 8],
+                  [5, 6, 7, 8, 9]], dtype='float32')
+    b = cv.dct(a)
+    c = cv.idct(b)
+    print('原始数据为：\n{}\nDCT变换后数据为：\n{}\nDCT变换后逆变换结果为：\n{}'.format(a, b, np.int0(c)))#经过dct和idct变换后，
+
+    # 对图像进行处理
+    # 读取图像lena.png
+    image = cv.imread('./images/lena.png')
+    if image is None:
+        print('Failed to read lena.png.')
+        sys.exit()
+    cv.imshow('Origin', image)
+
+    image_height, image_width = image.shape[:-1]
+    # 计算合适的离散傅里叶变换尺寸
+    height = 2 * cv.getOptimalDFTSize(int((image_height + 1) / 2))#目前cv.dct0函数只支持列数（或元素个数）偶数的矩阵（或向量），注意在使用该函数处理数据时需要将数据填充到指定的尺寸.
+    # 在实际使用中最佳｛尺寸可以通过2cv.getOptimalDFTSize（（N＋1）/2）计算
+    width = 2 * cv.getOptimalDFTSize(int((image_width + 1) / 2))#
+
+    # 扩展图像
+    top = 0
+    bottom = int(height - image_height - top)#只扩底部，顶部不变
+    left = 0
+    right = int(width - image_width - left)#只扩右边，左边不变
+    appropriate = cv.copyMakeBorder(image, top=top, bottom=bottom, left=left, right=right, borderType=cv.BORDER_CONSTANT)
+
+    # 三个通道需要分别进行DCT变换，cv.dct()函数只能变换单通道的矩阵，因此需要怼3个通道进行离散余弦变换。
+    one, two, three = cv.split(appropriate)#b,g,r =cv.split()
+    one_DCT = cv.dct(one.astype('float32'))
+    two_DCT = cv.dct(two.astype('float32'))
+    three_DCT = cv.dct(three.astype('float32'))
+
+    # 进行通道合并
+    result = cv.merge([one_DCT, two_DCT, three_DCT])
+
+    # 保存结果
+    cv.imwrite('./results/Dct.png', result)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+    #离散余弦变换主要用在信号和图像的有损压缩中。离散余弦变换具有“能量集中”的特性,信号经过变换后能量主要集中在结果的低频部分。在结果还可以看到经过余弦变换，然后逆变换，矩阵的值会改变。
+#########################################################################################
