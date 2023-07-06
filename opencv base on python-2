@@ -1901,4 +1901,108 @@ if __name__ == '__main__':
             x = np.random.randint(0, h)
             y = np.random.randint(0, w)
             pt = (y, x)
-#################将代码中的更换成这种就把图片所有位置都漫水了。
+#################将代码中的更换成这种就把图片所有位置都漫水了。这个程序可以让你理解一个为什么说漫水法是一种局部的图像分割法。
+import cv2 as cv
+import numpy as np
+import sys
+
+
+def generate_random_color():
+    return np.random.randint(0, 256, 3)
+
+
+def fill_color(img1, n, img2):
+    h, w = img1.shape[:-1]
+    res = np.zeros((h, w, 3), img1.dtype)
+    # 生成随机颜色
+    random_color = {}
+    for c in range(1, n+1):
+        random_color[c] = generate_random_color()
+    # 填色
+    for i in range(h):
+        for j in range(w):
+            item = img2[i][j]
+            if item == -1:#标记图像中所有未被标记的像素值都为0。在函数输出时两个区域之间的分割线用-1表示。
+
+                res[i, j, :] = (255, 255, 255)#是说rgb图像中的[i, j, 0],[i, j, 1],[i, j, 2]都这样赋值
+            elif item == 0:#标记图像中所有未被标记的像素值都为0。在函数输出时两个区域之间的分割线用-1表示。
+                res[i, j, :] = (0, 0, 0)
+            else:
+                res[i, j, :] = random_color[item]
+    return res
+
+
+if __name__ == '__main__':
+    # 读取图像HoughLines.jpg
+    image = cv.imread('./images/HoughLines.jpg')
+    if image is None:
+        print('Failed to read HoughLines.jpg.')
+        sys.exit()
+    cv.imshow('Origin', image)
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+
+    # 高斯模糊便于减少边缘数目
+    # gray = cv.GaussianBlur(gray, (5, 5), 10, sigmaY=20)
+
+    # 提取图像边缘并进行闭运算
+    mask = cv.Canny(gray, 150, 300)
+    k = cv.getStructuringElement(0, (3, 3))
+    mask = cv.morphologyEx(mask, cv.MORPH_CLOSE, k)
+    cv.imshow('mask', mask)
+
+    # 计算连通域数目
+    contours, hierarchy = cv.findContours(mask, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE)
+
+    # 绘制轮廓，用于输入至分水岭算法
+    mask_water = np.zeros(mask.shape, dtype='int32')
+    for i in range(len(contours)):
+        cv.drawContours(mask_water, contours, i, (i + 1), -1, 8, hierarchy)# 看到这里的hierarchy了吗？如果去掉也可以。
+        #还有个信息是i, (i + 1),是什么呢？这个里面的颜色呢？
+    # 分水岭算法操作
+    result = cv.watershed(image, mask_water)
+    # 为不同的分割区域绘制颜色
+    result = fill_color(image, len(contours), mask_water)
+
+    # 展示结果
+    cv.imshow('Result', result)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+##################################################这里是使用分水岭算法来分割图像，是基于整个图像来做的。等有时间试试为什么不用在我们的天馈识别中。
+##的例程使用图像边缘作为标记图像这具有一定的被动性，并且会产生众多较小的区域。在实际使用时通过人为标记的方式可能会得到更好的结果。
+import cv2 as cv
+import numpy as np
+import sys
+if __name__ == '__main__':
+    # 读取图像lena.png
+    image = cv.imread('./images/lena.png')
+    if image is None:
+        print('Failed to read lena.png.')
+        sys.exit()
+    h, w = image.shape[:-1]
+    # 备份图像，防止绘制矩形框对结果产生影响
+    imgRect = image.copy()
+    imgRect = cv.rectangle(imgRect, (80, 30), (420, 420), (255, 255, 255), 3)
+    cv.imshow('Select Area', imgRect)
+
+    # 进行分割
+    bgdmod = np.zeros((1, 65), dtype='float64')
+    #print(bgdmod)
+    fgdmod = np.zeros((1, 65), dtype='float64')
+    mask = np.zeros(image.shape[:-1], dtype='uint8')
+    mask, _, _ = cv.grabCut(image, mask, rect=(80, 30, 420, 420), bgdModel=bgdmod, fgdModel=fgdmod,
+               iterCount=5, mode=cv.GC_INIT_WITH_RECT)#_,_分别表示bgdModel背景模型的临时数组，fgdMode1前景模型的临时数组
+
+    # 将分割出的前景绘制出来
+    for i in range(h):
+        for j in range(w):
+            n = mask[i, j]
+            if n == 1 or n == 3:
+                pass
+            else:
+                image[i, j, :] = 0#从这里看mask的值其实已经改变了，最后图像的分割结果也是通过分析掩模矩阵中每个像素值进行提取的。如果mask[i,j]为1，3则保持原值，如果否则直接变黑抹掉。
+
+    # 展示结果
+    cv.imshow('Result', image)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+#################################################################cv.grabCut()方法，通过mask的变化来分割前景和背景。
