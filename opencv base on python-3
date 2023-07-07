@@ -1,0 +1,38 @@
+#######################
+#####
+#####  CAPTER 9
+#####
+#######################
+import cv2 as cv
+import numpy as np
+import sys
+
+
+if __name__ == '__main__':
+    # 读取图像
+    image = cv.imread('./images/lena.jpg')
+    if image is None:
+        print('Failed to read lena.jpg.')
+        sys.exit()
+
+    # 转为灰度图像
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+
+    # 生成关键点
+    kps = []
+    key_points = np.random.randint(0, 512, 200).reshape((100, 2))
+    # print(key_points)
+    # exit()
+    for point in key_points:
+        kps.append(cv.KeyPoint(float(point[0]), float(point[1]), 1))#这里程序中代码错误，有对于cv.KeyPoint()，前两个参数需要用float类型。
+
+    # 绘制关键点
+    image_result = cv.drawKeypoints(image, kps, None, (), cv.DRAW_MATCHES_FLAGS_DEFAULT)
+    gray_result = cv.drawKeypoints(gray, kps, None, (), cv.DRAW_MATCHES_FLAGS_DEFAULT)
+
+    # 展示结果
+    cv.imshow('Color Result', image_result)
+    cv.imshow('Gray Result', gray_result)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+#################这里的角点检测实在看不出是什么，因为这些角点都是随机生成的，根本不是关键点。
