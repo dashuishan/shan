@@ -2072,39 +2072,4 @@ if __name__ == '__main__':
     cv.destroyAllWindows()
 ##########################使用CV.inpaint()函数修复。思考为什么这里的掩码其实就是干扰的那个东西呢？可否用来除去水印呢。图像修复技术就是根据图像中损坏区域边缘的像素值大小及像素间的结构关系估计出损坏区
 域可能的像素排列,从而去除图像中受“污染”的区域。
-import cv2 as cv
-import numpy as np
-import sys
 
-if __name__ == '__main__':
-    # 读取图像
-    image = cv.imread('./images/lena.jpg')
-    if image is None:
-        print('Failed to read lena.jpg.')
-        sys.exit()
-
-    # 转为灰度图像
-    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-
-    # 计算Harris系数
-    harris = cv.cornerHarris(gray, 2, 3, 0.04, borderType=cv.BORDER_DEFAULT)
-
-    # 对Harris进行归一化便于进行数值比较
-    harris_nor = cv.normalize(harris, None, alpha=0, beta=255, norm_type=cv.NORM_MINMAX)
-    harris_nor = harris_nor.astype('uint8')
-
-    # 寻找Harris角点
-    kps = []
-    for i in np.argwhere(harris_nor > 125):#与125阈值相互比较，大于就保存下来。
-        kps.append(cv.KeyPoint(float(i[1]), float(i[0]), 1))#则合理的cv.KeyPoint()里面是float属性。
-
-    # 绘制角点
-    result = cv.drawKeypoints(image, kps, None)
-
-    # 展示结果
-    cv.imshow('R', harris_nor)
-    cv.imshow('Harris KeyPoints', result)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-#出Hams角点主要集中在图像人物的头发和帽子区域，因为这两个区域中线段的交点较多。
-########################################################################
