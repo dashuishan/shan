@@ -176,4 +176,55 @@ if __name__ == '__main__':
     cv.imshow('ORB KeyPoints(with Angle and Size)', image1)
     cv.waitKey(0)
     cv.destroyAllWindows()
-##################################################ORB存在的意义是SURF和SIFT的速率太低，而且专利限制也无法进行相关运算。
+##################################################ORB存在的意义是SURF和SIFT的速率太低，而且专利限制也无法进行相关运算。这个是计算两个像素点之间汉明距的方法，而SURE和SIFT是计算欧式距离的方法。
+####两个整数之间的 汉明距离 指的是这两个数字对应二进制位不同的位置的数目。
+import cv2 as cv
+import sys
+
+
+if __name__ == '__main__':
+    # 读取图像
+    image1 = cv.imread('./images/box.png')
+    image2 = cv.imread('./images/box_in_scene.png')
+    if image1 is None or image2 is None:
+        print('Failed to read box.png or box_in_scene.png.')
+        sys.exit()
+
+    # 创建ORB对象
+    orb = cv.ORB_create(1000, 1.2, 8, 31, 0, 2, cv.ORB_HARRIS_SCORE, 31, 20)#暴力匹配使用的是ORB的方法，因此是可以运行的。
+
+    # 分别计算image1，image2的ORB特征点和描述子
+    kps1, des1 = orb.detectAndCompute(image1, None, None)#分别计算两张图片的ORB特征和描述子
+    kps2, des2 = orb.detectAndCompute(image2, None, None)
+
+    # 特征点匹配
+    # 创建BFMatcher对象
+    bf = cv.BFMatcher(cv.NORM_HAMMING, crossCheck=True)#crossCheck意思是使用了交叉检查的方法
+    matches = bf.match(des1, des2)
+
+    # 输出匹配结果中最大值和最小值
+    matches_list = []
+    for match in matches:
+        matches_list.append(match.distance)
+    max_dist = max(matches_list)
+    min_dist = min(matches_list)
+
+    # 设定阈值，筛选出合适的匹配点对
+    good_matches = []
+    for match in matches:
+        if match.distance <= max(2.0 * min_dist, 20.0):#距离最小汉明距离的2倍和距离20中的较大值作为优化匹配的阈值对特征点对进行筛选。
+            good_matches.append(match)
+
+    # 输出匹配成功的特征点数目
+    print('匹配成功的特征点数目为：{}，筛选后的特征点数目为：{}'.format(len(matches), len(good_matches)))
+
+    # 绘制筛选前后的匹配结果
+    result1 = cv.drawMatches(image1, kps1, image2, kps2, matches, None)#cv.drawMatches()画出来匹配的线段
+    result2 = cv.drawMatches(image1, kps1, image2, kps2, good_matches, None)
+
+    # 展示结果
+    cv.imshow('Matches', result1)
+    cv.imshow('Good Matches', result2)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+    ################这里是暴力匹配的案例，使用的ORB的匹配 然后使用了cv.BFMatcher()对比两张图。并使用v.drawMatches()画出匹配的线段。
