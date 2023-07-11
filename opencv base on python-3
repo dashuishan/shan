@@ -143,3 +143,37 @@ if __name__ == '__main__':
     cv.waitKey(0)
     cv.destroyAllWindows()
 ##########################################################计算SURF特征点。但是cv.xfeatures2d.SURF_create()在新的版本中并不支持调用。SURF是SIFT的变形。方便提升SIFT的效率。
+import cv2 as cv
+import numpy as np
+import sys
+
+
+if __name__ == '__main__':
+    # 读取图像
+    image = cv.imread('./images/lena.jpg')
+    if image is None:
+        print('Failed to read lena.jpg.')
+        sys.exit()
+
+    # 创建ORB对象
+    orb = cv.ORB_create(500, 1.2, 8, 31, 0, 2, cv.ORB_HARRIS_SCORE, 31, 20)
+
+    # 计算ORB特征点
+    kps = orb.detect(image, None)#因为是继承的关系，所以是可以使用detect和compute方法的。
+
+    # 计算ORB描述子
+    descriptions = orb.compute(image, kps)
+
+    # 绘制ORB特征点
+    image1 = image.copy()
+    # 不含角度和大小
+    image = cv.drawKeypoints(image, kps, image, ())
+    # 包含角度和大小
+    image1 = cv.drawKeypoints(image1, kps, image1, (), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+
+    # 展示结果
+    cv.imshow('ORB KeyPoints', image)
+    cv.imshow('ORB KeyPoints(with Angle and Size)', image1)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+##################################################ORB存在的意义是SURF和SIFT的速率太低，而且专利限制也无法进行相关运算。
