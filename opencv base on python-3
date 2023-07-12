@@ -305,9 +305,60 @@ if __name__ == '__main__':
     kps2, des2 = orb.detectAndCompute(image2, None, None)
 
     # 创建BFMatcher对象
-    bf = cv.BFMatcher(cv.NORM_HAMMING)
+    bf = cv.BFMatcher(cv.NORM_HAMMING)#
     # 暴力匹配
-    matches = bf.match(des1, des2)
+    matches = bf.match(des1, des2)#之前一直不明白match与knnmatch的返回值到底是什么，查阅了一些资料才理解。
+    # 其实二者都是返回的DMatch类型的数据结构。
+    # 那么这个这个DMatch数据结构究竟是什么呢？
+    # 它包含三个非常重要的数据分别是queryIdx，trainIdx，distance
+    # 先说一下这三个分别是什么在演示其用途：
+    # queryIdx：测试图像的特征点描述符的下标（第几个特征点描述符），同时也是描述符对应特征点的下标。
+    # trainIdx：样本图像的特征点描述符下标, 同时也是描述符对应特征点的下标。
+    # distance：代表这怡翠匹配的特征点描述符的欧式距离，数值越小也就说明俩个特征点越相近。
+    # bf = cv.BFMatcher_create()
+    # matches = bf.match(des1, des2)
+    # for matche in matches:
+    #     print(matche)
+    #     print(matche.queryIdx)
+    #     print(matche.trainIdx)
+    #     print(matche.distance)
+    # 输出的结果如下
+    # < DMatch
+    # 0x7f47e3aa6f50 >
+    # 4220
+    # 588
+    # 149.05032348632812
+    # < DMatch
+    # 0x7f47e3aa6f70 >
+    # 4221
+    # 3089
+    # 303.5638427734375
+    #每个特征点本身也具有以下属性：.pt关键点坐标，.angle表示关键点方向，response表示响应强度，.size标书该点的直径大小。
+    #演示pt
+    # def match_demo(image1, image2):
+    #     gray1 = cv.cvtColor(image1, cv.COLOR_BGR2GRAY)
+    #
+    #
+    # gray2 = cv.cvtColor(image2, cv.COLOR_BGR2GRAY)
+    # sift = cv.xfeatures2d.SIFT_create()
+    # key1, des1 = sift.detectAndCompute(gray1, None)
+    # key2, des2 = sift.detectAndCompute(gray2, None)
+    #
+    # bf = cv.BFMatcher_create()
+    # matches = bf.match(des1, des2)
+    # for matche in matches:
+    #     print(key1[matche.queryIdx].pt)  # 表示第（matche.queryIdx）个特征点的坐标
+    #Knnmatch与match的返回值类型一样，只不过一组返回的俩个DMatch类型：
+    # matches = flann.knnMatch(des1, des2, k=2)
+    # # matchesMask = [[0, 0] for i in range(len(matches))]
+    # for i, matche in enumerate(matches):
+    #     print(matche)
+    # 返回值是
+    # [ < DMatch 0x7f117af995f0 >, < DMatch0x7f117af99610 >]
+    # [ < DMatch 0x7f117af99630 >, < DMatch0x7f117af99650 >]
+    #这俩个DMatch数据类型是俩个与原图像特征点最接近的俩个特征点（match返回的是最匹配的）只有这俩个特征点的欧式距离小于一定值的时候才会认为匹配成功。
+    # 列入：原图像特征点与俩个绿色苹果相匹配，那么就会认为这个特征点是lv苹果，但若与原图像最接近的匹配分别是一个绿苹果和一个红苹果，那么就会认为匹配是失败的，即没有相匹配的特征点。
+    #集体的信息 见到CSDN的博文 https://blog.csdn.net/weixin_44072651/article/details/89262277
 
     # 查找最小汉明距离
     matches_list = []
@@ -321,7 +372,7 @@ if __name__ == '__main__':
         if match.distance <= max(2.0 * min_dist, 20.0):
             good_matches.append(match)
 
-    # 使用RA10选匹配结果
+    # 使用RANSAC算法筛选匹配结果
     # 获取关键点坐标
     src_kps = np.float32([kps1[i.queryIdx].pt for i in good_matches]).reshape(-1, 1, 2)
     dst_kps = np.float32([kps2[i.trainIdx].pt for i in good_matches]).reshape(-1, 1, 2)
@@ -342,4 +393,4 @@ if __name__ == '__main__':
     cv.imshow('RANSAC Matches', result)
     cv.waitKey(0)
     cv.destroyAllWindows()
-#########################################https://blog.csdn.net/kyjl888/article/details/103367842
+######################################### cv.findHomography()
