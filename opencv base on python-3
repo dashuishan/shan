@@ -540,4 +540,4 @@ if __name__ == '__main__':
             cv.destroyAllWindows()
         else:
             sys.exit()
-#####################################分别使用cv.undistort()(方法一）和cv.initUndistortRectifyMap()+cv.remap()两种方法来
+#####################################分别使用cv.undistort()(方法一）和cv.initUndistortRectifyMap()+cv.remap()两种方法来对图像进行矫畸。这才是这些坐标变换的真正意义。
