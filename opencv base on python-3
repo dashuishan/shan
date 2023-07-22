@@ -784,6 +784,23 @@ if __name__ == '__main__':
         # 拼接图像（同样处理原图像以便做对比）
         origin = np.concatenate([imageLs[i], imageRs[i]], 1)
         result = np.concatenate([result1, result2], 1)
+#np.concatenate()是将将数组拼接起来，就是将图片也拼接了起来。
+#>>> a=np.array([1,2,3])
+#>>> b=np.array([11,22,33])
+#>>> c=np.array([44,55,66])
+#>>> np.concatenate((a,b,c),axis=0)  # 默认情况下，axis=0可以不写
+#array([ 1,  2,  3, 11, 22, 33, 44, 55, 66]) #对于一维数组拼接，axis的值不影响最后的结果
+#>>> a=np.array([[1,2,3],[4,5,6]])
+#>>> b=np.array([[11,21,31],[7,8,9]])
+#>>> np.concatenate((a,b),axis=0)
+#array([[ 1,  2,  3],
+       [ 4,  5,  6],
+       [11, 21, 31],
+       [ 7,  8,  9]])
+ 
+#>>> np.concatenate((a,b),axis=1)  #axis=1表示对应行的数组进行拼接
+#array([[ 1,  2,  3, 11, 21, 31],
+       [ 4,  5,  6,  7,  8,  9]])
         # 绘制直线，用于比较同一个内角点y轴是否一致
         origin = cv.line(origin, (-1, int(all_points_L[i][0][0][1])), (len(result[0]), int(all_points_L[i][0][0][1])), (0, 0, 255), 2)
         result = cv.line(result, (-1, int(all_points_L[i][0][0][1])), (len(result[0]), int(all_points_L[i][0][0][1])), (0, 0, 255), 2)
