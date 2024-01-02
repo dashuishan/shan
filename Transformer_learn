@@ -13,3 +13,73 @@ print(result)
 2  3  7
 3  4  8
 ##################################这其实也是query的使用方法。
+#实现克隆函数，因为在多头注意力机制下，要用到多个结构相同的线性层
+#需要使用clone函数将他们一同初始化到一个网络层列表对象中
+def clones(module,N)：
+   #module:代表需克隆的目标网络层
+   #N：将module克隆几个
+   return nn.Modulelist([copy.deepcopy(module) for _ in rang(N)])
+#实现多头注意力机制的类
+class MultiHeadAttention(nn.Module):
+    def __init__(selt,head,embedding_dim,dropout=0.1):
+        #head：代表几个头的参数
+        #embedding_dim：代表词嵌入的维度
+        #dropout：置零的比例
+        super(MultiHeadeAttention,self).__init__()
+        
+        #要认清一个事实：多头的数量head需要整除词嵌入的维度embedding_dim
+        assert embedding_dim % head ==0
+        
+        #得到每个头获得的词向量的维度
+        self.d_k=embedding_dim // head
+        
+        self.head=head
+        self.embedding_dim=embedding_dim
+        
+        #获得线性层，要获得4个，分别是Q,K,V以及最终的输出线性层
+        self.linears=clones(nn.Linear(embedding_dim,embedding_dim),4)
+        
+        #初始化注意力张量
+        self.attn=None
+        
+        #初始化drpout对象
+        self.dropout=nn.Dropout(p=dropout)
+        
+    def forward(self,query,key,value,mask=None):
+        #query,key,value是注意力机制的三个输入张量，mask代表掩码张量
+        #首先判断是否使用掩码张量
+        if mask is not None:
+            #使用unsqueeze对掩码张量进行扩充，代表多头中的第n个头
+            mask=mask.unsqueeze(1)
+        #得到batch_size
+        batch_size=query.size(0)
+        
+        #首先使用zip将网络层和输入连接在一起，模型的输出利用view和transpose进行维度和型状的变化
+        query,key,value=\
+            [mode(x).view(batch_size,-1,self.head,self.d_k).tanspose(1,2)
+            for model,x in zip(self.linears,(query,key,value))
+             
+            #将每个头的输出传入到注意力层
+             x,self.attn=attention(query,key,value,mask=mask,dropout=self.dropout)
+             
+             #得到每个头的计算结果是4维张量，需要进行形状转换
+             #前面已经进行了转置，需要把他转换回来
+             #注意经历了transpose方法后，需要进行contiguous方法，不然无线使用view()方法
+             x=x.transpose(1,2).contiguous().view(batch_size,-1,self.head,self,d_k)
+             
+             #最后将x输入线性层列表中的最后一个线性层中进行处理，得到最终多头注意力结构输出
+             return self.linears[-1](x) #-1表示最后一个线性层
+             
+#实例化若干参数
+head=8
+embedding_dim=512
+dropout=0.2
+             
+#若干输入参数的初始化
+query=key=value=pe_result
+
+mask=Variable(torch.zero(8,4,4))
+mha=MultiHeadedAttention(head,embedding_dim,dropout)
+mha_result=mha(query,key,value,mask)
+print(mha_result)
+print(mha_result.shape)
